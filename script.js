@@ -102,8 +102,50 @@ const CourseInfo = {
   
   console.log(result);
 
+//=======================================================================================
+// helper functions
+//
+// verifyCourseId = Search list of courses to make sure that the courseId is in the list
+//=======================================================================================
 
+const verifyCourseId = (courseId) => Number(CourseInfo.id) === Number(courseId);
+const verifyDate = (dateString) => !isNaN(Date.parse(dateString));
+const getTimestamp = (dateString) => Date.parse(dateString);
+const getCurrentTimestamp = () => Date.now();
+const nowPastDue = (dateString) => (Date.now() >= Date.parse(dateString));
 
-  // End
-  console.log(`Goodbye from script.js`);
-  
+const verifyAssignmentGroupCourseId = (assignmentGroup) => verifyCourseId(assignmentGroup.course_id);
+
+//==================================================================
+// Test block
+//
+// This test block verifies that the helper functions work
+//==================================================================
+
+{
+  // Verify course ID
+  let courseId = '451';
+  console.log(`courseID ${courseId} in list = ${verifyCourseId(courseId)}`);
+
+  // Verify date
+  let dateString1 = "2024-09-12";
+  let dateString2 = "2024-09-12 00:00:00";
+  let dateString3 = "HELL WORLD";
+
+  console.log(`dateString ${dateString1} is valid = ${verifyDate(dateString1)}, timestamp = ${getTimestamp(dateString1)}, past due = ${nowPastDue(dateString1)}`);
+  console.log(`dateString ${dateString2} is valid = ${verifyDate(dateString2)}, timestamp = ${getTimestamp(dateString2)}, past due = ${nowPastDue(dateString2)}`);
+  console.log(`dateString ${dateString3} is valid = ${verifyDate(dateString3)}, timestamp = ${getTimestamp(dateString3)}, past due = ${nowPastDue(dateString3)}`);
+
+  // Verify course_id in Assignments
+  const assignment1 = {
+    course_id: "51"
+  };
+  let assignment2 = {
+    course_id: `451`
+  };
+  console.log(`courseID ${assignment1.course_id} is valid = ${verifyAssignmentGroupCourseId(assignment1)}`);
+  console.log(`courseID ${assignment2.course_id} is valid = ${verifyAssignmentGroupCourseId(assignment2)}`);
+
+}
+
+console.log(`Goodbye from script.js`);
