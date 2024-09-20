@@ -258,8 +258,6 @@ function getListOfAssignmentsDue(ag) {
   // go through the assignment group, add it if not on the list
   for (const a of ag.assignments) {
 
-    debugger;
-
     let dueDate = new Date(a.due_at);
 
     // For testing the line below
@@ -300,12 +298,12 @@ function getListOfAssignmentsDue(ag) {
 //===================================
 // Actual code
 //===================================
-{
+{ 
   // Results
   resultList = [];
 
   // Interator through all assignents and invoke callback function
-  function iterateAssignments(assignmentGroup, callbackFunction) {
+  function iterateAssignments(assignmentGroup, callbackFunction, parametersToCallbackFunction) {
 
     // Go through assignment list
     for (const assignment of assignmentGroup.assignments) {
@@ -313,12 +311,12 @@ function getListOfAssignmentsDue(ag) {
 
       // If callback, then invoke it
       if (callbackFunction)
-        callbackFunction(assignment);
+        callbackFunction.apply(this, assignment, parametersToCallbackFunction);
     }
   }
 
   // Interator through all students and invoke callback function
-  function iterateStudents(students, callbackFunction) {
+  function iterateStudents(students, callbackFunction, parametersToCallbackFunction) {
 
     // Go through assignment list
     for (const student of students) {
@@ -326,7 +324,7 @@ function getListOfAssignmentsDue(ag) {
 
       // If callback, then invoke it
       if (callbackFunction)
-        callbackFunction(student);
+        callbackFunction.apply(this, student, parametersToCallbackFunction);
     }
   }
 
@@ -340,9 +338,71 @@ function getListOfAssignmentsDue(ag) {
 
     resultList.push( { "id": studentId });
   }
+  
+  function iterateDueAssignments(assignmentGroup, dueAssignments, callbackFunction, parametersToCallbackFunction)
+  {
+    // Go through assignment list
+    for (n in dueAssignments) {
+      callbackFunction.apply(assignmentGroup, assignmentGroup.assignments[n].id, parametersToCallbackFunction);
+    } 
+  }
 
-  function processAssignmentsByStudent(assignment, student) {
-    console.log(`Process assignment ${assignment} by student ${student}`);
+  function processAssignments(assignmentGroup, dueAssignments, learnerList, learnerSubmissions) {
+
+  console.log(`${dueAssignments} ${learnerList}`);
+
+  // For each student (learner)
+  for (l of learnerList) {
+
+    // Reset the score board
+    let totalPossiblePoints = 0;
+    let totalEarnedPoints = 0;
+  
+    // For each due assignment
+    for (d of dueAssignments) {
+
+      console.log(`Processing assignment ${d} for learner ${l}`);
+
+      // Find assignment
+      const result = assignmentGroup.assignments.find(obj => obj.id === d);
+      console.log(`result = ${result}`);
+
+      // If we found it
+      if (result != undefined) {
+
+          // Bump up the total possible score
+          totalPossiblePoints += result.points_possible;
+
+          // Now check if the student did the assignment
+          const result2 = learnerSubmissions.find(obj => obj.learner_id === l && obj.assignment_id === d)
+          console.log(`result2 = ${result2}`);
+
+          // If the student submitted the assignment
+          let assignmentValue = 1;
+
+          if (result2 != undefined) {
+            console.log(result2);
+
+            if (getTimestamp(result2.submission.submitted_at) > getTimestamp(result.due_at)) {
+              console.log(`assignment is late!`);
+
+              // Deduct 10%
+              assignmentValue = 0.9;
+            }
+
+            // Bump up the # of points earned
+            totalEarnedPoints += (result2.submission.score * assignmentValue);
+            console.log(`Total earned points for learner ${l} = ${totalEarnedPoints}`);
+          }
+        }
+
+        // Check to see if the student actually did the assignment
+        // for (a = 0; a < learnerSubmmissions)
+      }
+
+      console.log(`Total points possible for learner ${l} is ${totalPossiblePoints}`);
+    }
+
   }
 
   // verifyHelperFunctions();
@@ -355,19 +415,19 @@ function getListOfAssignmentsDue(ag) {
   console.log(`This time is used to determine if an assignment is due`);
 
   // Get list of students (learners)
-  let condensedLearnerList = getListOfLearners(LearnerSubmissions);
-  console.log(`learner list = ${condensedLearnerList}`);
+  let learnerList = getListOfLearners(LearnerSubmissions);
+  console.log(`learner list = ${learnerList}`);
 
   // Get list of assignments that are due now
-  let condensedAssignmentListDue = getListOfAssignmentsDue(AssignmentGroup);
-  console.log(`assignment list = ${condensedAssignmentListDue}`);
+  let dueAssignments = getListOfAssignmentsDue(AssignmentGroup);
+  console.log(`Due assignment list = ${dueAssignments}`);
 
-  // iterateAssignments(AssignmentGroup, assignmentCallback);
-  // iterateStudents(condensedLearnerList, studentCallback);
+  debugger;
 
-  // Go through the list of students, and 
-  //iterateStudents(condensedLearnerList, studentCallback);
+  // Process assignments that are due
+  processAssignments(AssignmentGroup, dueAssignments, learnerList, LearnerSubmissions);
 
+  debugger;
   console.log(resultList);
 }
 
