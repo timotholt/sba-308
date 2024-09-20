@@ -102,25 +102,25 @@ const CourseInfo = {
   
   console.log(result);
 
+
 //=======================================================================================
-// helper functions
+// This is first line of code of the actual application
 //=======================================================================================
 
-// Primatives
+// Save the start time 
+const applicationStartTimestamp = Date.now();
+const applicationStartDatestamp = new Date(applicationStartTimestamp);
+
 const validDate = (dateString) => !isNaN(Date.parse(dateString));
 const getTimestamp = (dateString) => Date.parse(dateString);
-const getCurrentTimestamp = () => Date.now();
-const nowPastDue = (dateString) => (getCurrentTimestamp() >= getTimestamp(dateString));
-
-// This is the start run of the application
-const startTimestamp = getCurrentTimestamp();
-const startDatestamp = new Date(startTimestamp);
+// const nowPastDue = (dateString) => (getCurrentTimestamp() >= getTimestamp(dateString));
 
 //=======================================================================================
 // Application specific helper functions
 //
 // 10% of grade: Use functions to handle repeated tasks.
 //=======================================================================================
+
 
 // Validate Course ID
 // Long winded (was one line but need to use a try/catch for 5% grade)
@@ -221,17 +221,155 @@ function verifyHelperFunctions() {
   console.log(`assignment id ${i} is valid = ${validAssignmentId(AssignmentGroup, i)}`);
 }
 
+// Build a list of unique individual learners from the learner submissions
+// Create and/or manipulate arrays and objects = 10% of grade.
+function getListOfLearners(LearnerSubmissions) {
+  let listOfLearners = [];
+
+  // go through the submisison list, add it if not on the list
+  for (const LearnerSubmission of LearnerSubmissions) {
+    if (listOfLearners.indexOf(LearnerSubmission.learner_id) < 0)
+
+      // Create and/or manipulate arrays and objects = 10% of grade.
+      listOfLearners.push(LearnerSubmission.learner_id);
+  }
+
+  // For testing the if statement below
+  // listOfLearners = [ 120, 240, 11, 9, 2 ];
+  // listOfLearners = [];
+
+  // Sort the list
+  listOfLearners.sort((a, b) => a - b);
+
+    // List can't be empty.  We don't use throw/catch here cause it's messy looking
+  console.log(listOfLearners.length === 0 ?
+    `No learners found in learner submissionslist!` :
+    `List of learners = ${listOfLearners}`);
+
+  // Return list
+  return (listOfLearners);
+}
+
+// Build a list of unique assignments
+// Create and/or manipulate arrays and objects = 10% of grade.
+function getListOfAssignmentsDue(ag) {
+  let listOfAssignmentsDue = [];
+
+  // go through the assignment group, add it if not on the list
+  for (const a of ag.assignments) {
+
+    debugger;
+
+    let dueDate = new Date(a.due_at);
+
+    // For testing the line below
+    // dueDate = 'laksjdf;lakjsdfl;akjsdflkjadfs'
+    
+    // Check if due date is bogus
+    if (!validDate(dueDate))
+      console.log(`Due date ${dueDate} is not valid.`);
+
+    // If due date is legit, and it's due, add it to the assignment due list
+    else {
+      console.log(`Assignment ${a.id} is due at ${dueDate}`);
+
+      if (applicationStartTimestamp >= getTimestamp(dueDate))
+        if (listOfAssignmentsDue.indexOf(a.id) < 0)
+
+          // Create and/or manipulate arrays and objects = 10% of grade.
+          listOfAssignmentsDue.push(a.id);
+    }
+  }
+
+  // For testing the sorting and console log statements below
+  // listOfAssignments = [ 120, 240, 11, 9, 2 ];
+  // listOfAssignments = [];
+
+  // Sort the list
+  listOfAssignmentsDue.sort((a, b) => a - b);
+
+    // List can't be empty.  We don't use throw/catch here cause it's messy looking
+  console.log(listOfAssignmentsDue.length === 0 ?
+    `No assignments found in assignment group!` :
+    `List of assignments due on ${applicationStartDatestamp} = ${listOfAssignmentsDue}`);
+
+  // Return list
+  return (listOfAssignmentsDue);
+}
+
 //===================================
 // Actual code
 //===================================
 {
+  // Results
+  resultList = [];
+
+  // Interator through all assignents and invoke callback function
+  function iterateAssignments(assignmentGroup, callbackFunction) {
+
+    // Go through assignment list
+    for (const assignment of assignmentGroup.assignments) {
+      console.log(`Iterating assignment ${assignment.id}`);
+
+      // If callback, then invoke it
+      if (callbackFunction)
+        callbackFunction(assignment);
+    }
+  }
+
+  // Interator through all students and invoke callback function
+  function iterateStudents(students, callbackFunction) {
+
+    // Go through assignment list
+    for (const student of students) {
+      console.log(`Iterating student id ${student}`);
+
+      // If callback, then invoke it
+      if (callbackFunction)
+        callbackFunction(student);
+    }
+  }
+
+  // Callback functions
+  function assignmentCallback(assignment) {
+    console.log(`Callback: assignment ID = ${assignment.id}`);
+  }
+
+  function studentCallback(studentId) {
+    console.log(`Callback: student ID = ${studentId}`);
+
+    resultList.push( { "id": studentId });
+  }
+
+  function processAssignmentsByStudent(assignment, student) {
+    console.log(`Process assignment ${assignment} by student ${student}`);
+  }
+
   // verifyHelperFunctions();
 
+  //=========================================================================
   // Display the start time of this batch
-  console.log(`Batch run started at timestamp = ${startDatestamp} (${startTimestamp} Unix time)`);
+  //=========================================================================
 
+  console.log(`Application started at = ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
+  console.log(`This time is used to determine if an assignment is due`);
+
+  // Get list of students (learners)
+  let condensedLearnerList = getListOfLearners(LearnerSubmissions);
+  console.log(`learner list = ${condensedLearnerList}`);
+
+  // Get list of assignments that are due now
+  let condensedAssignmentListDue = getListOfAssignmentsDue(AssignmentGroup);
+  console.log(`assignment list = ${condensedAssignmentListDue}`);
+
+  // iterateAssignments(AssignmentGroup, assignmentCallback);
+  // iterateStudents(condensedLearnerList, studentCallback);
+
+  // Go through the list of students, and 
+  //iterateStudents(condensedLearnerList, studentCallback);
+
+  console.log(resultList);
 }
-
 
 //===================================
 // We are done!
