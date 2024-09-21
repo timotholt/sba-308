@@ -1,124 +1,140 @@
+//============================================================================
+// SBA-308
+//
+//============================================================================
+
 console.log(`Hello from script.js`);
+
+//============================================================================
+// The following objects are from the assignment
+//============================================================================
 
 // The provided course information.
 const CourseInfo = {
-    id: 451,
-    name: "Introduction to JavaScript"
-  };
+  id: 451,
+  name: "Introduction to JavaScript"
+};
   
-  // The provided assignment group.
-  const AssignmentGroup = {
-    id: 12345,
-    name: "Fundamentals of JavaScript",
-    course_id: 451,
-    group_weight: 25,
-    assignments: [
-      {
-        id: 1,
-        name: "Declare a Variable",
-        due_at: "2023-01-25",
-        points_possible: 50
-      },
-      {
-        id: 2,
-        name: "Write a Function",
-        due_at: "2023-02-27",
-        points_possible: 150
-      },
-      {
-        id: 3,
-        name: "Code the World",
-        due_at: "3156-11-15",
-        points_possible: 500
-      }
-    ]
-  };
+// The provided assignment group.
+const AssignmentGroup = {
+  id: 12345,
+  name: "Fundamentals of JavaScript",
+  course_id: 451,
+  group_weight: 25,
+  assignments: [
+    {
+      id: 1,
+      name: "Declare a Variable",
+      due_at: "2023-01-25",
+      points_possible: 50
+    },
+    {
+      id: 2,
+      name: "Write a Function",
+      due_at: "2023-02-27",
+      points_possible: 150
+    },
+    {
+      id: 3,
+      name: "Code the World",
+      due_at: "3156-11-15",
+      points_possible: 500
+    }
+  ]
+};
+
+// The provided learner (student) submission data, which is an array of objects.
+const LearnerSubmissions = [
+  {
+    learner_id: 125,
+    assignment_id: 1,
+    submission: {
+      submitted_at: "2023-01-25",
+      score: 47
+    }
+  },
+  {
+    learner_id: 125,
+    assignment_id: 2,
+    submission: {
+      submitted_at: "2023-02-12",
+      score: 150
+    }
+  },
+  {
+    learner_id: 125,
+    assignment_id: 3,
+    submission: {
+      submitted_at: "2023-01-25",
+      score: 400
+    }
+  },
+  {
+    learner_id: 132,
+    assignment_id: 1,
+    submission: {
+      submitted_at: "2023-01-24",
+      score: 39
+    }
+  },
+  {
+    learner_id: 132,
+    assignment_id: 2,
+    submission: {
+      submitted_at: "2023-03-07",
+      score: 140
+    }
+  }
+];
   
-  // The provided learner submission data.
-  const LearnerSubmissions = [
+// The desired output this program should generate. I have renamed the function appropriately.
+function getDesiredLearnerData(course, ag, submissions) {
+
+  // here, we would process this data to achieve the desired result.
+  const desiredResult = [
     {
-      learner_id: 125,
-      assignment_id: 1,
-      submission: {
-        submitted_at: "2023-01-25",
-        score: 47
-      }
+      id: 125,
+      avg: 0.985, // (47 + 150) / (50 + 150)
+      1: 0.94, // 47 / 50
+      2: 1.0 // 150 / 150
     },
+
     {
-      learner_id: 125,
-      assignment_id: 2,
-      submission: {
-        submitted_at: "2023-02-12",
-        score: 150
-      }
-    },
-    {
-      learner_id: 125,
-      assignment_id: 3,
-      submission: {
-        submitted_at: "2023-01-25",
-        score: 400
-      }
-    },
-    {
-      learner_id: 132,
-      assignment_id: 1,
-      submission: {
-        submitted_at: "2023-01-24",
-        score: 39
-      }
-    },
-    {
-      learner_id: 132,
-      assignment_id: 2,
-      submission: {
-        submitted_at: "2023-03-07",
-        score: 140
-      }
+      id: 132,
+      avg: 0.82, // (39 + 125) / (50 + 150)
+      1: 0.78, // 39 / 50
+      2: 0.833 // late: (140 - 15) / 150
     }
   ];
-  
-  function getLearnerData(course, ag, submissions) {
-    // here, we would process this data to achieve the desired result.
-    const desiredResult = [
-      {
-        id: 125,
-        avg: 0.985, // (47 + 150) / (50 + 150)
-        1: 0.94, // 47 / 50
-        2: 1.0 // 150 / 150
-      },
-      {
-        id: 132,
-        avg: 0.82, // (39 + 125) / (50 + 150)
-        1: 0.78, // 39 / 50
-        2: 0.833 // late: (140 - 15) / 150
-      }
-    ];
-  
-    return desiredResult;
-  }
-  
-  
 
+  return desiredResult;
+}
 
-//=======================================================================================
-// This is first line of code of the actual application
-//=======================================================================================
+//============================================================================
+//
+// SOLUTION FOR SBA-308 STARTS HERE
+//
+//============================================================================
 
-// Save the start time 
+//============================================================================
+// Save and display the application start time (used to determine if an
+// assignment is due or not) 
+//============================================================================
+
 const applicationStartTimestamp = Date.now();
 const applicationStartDatestamp = new Date(applicationStartTimestamp);
 
-const validDate = (dateString) => !isNaN(Date.parse(dateString));
-const getTimestamp = (dateString) => Date.parse(dateString);
-// const nowPastDue = (dateString) => (getCurrentTimestamp() >= getTimestamp(dateString));
+console.log(`Application started at = ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
+console.log(`This time is used to determine if an assignment is due.`);
 
-//=======================================================================================
+//============================================================================
 // Application specific helper functions
 //
 // 10% of grade: Use functions to handle repeated tasks.
-//=======================================================================================
+//============================================================================
 
+const validDate = (dateString) => !isNaN(Date.parse(dateString));
+const getTimestamp = (dateString) => Date.parse(dateString);
 
 // Validate Course ID
 // Long winded (was one line but need to use a try/catch for 5% grade)
@@ -293,62 +309,27 @@ function getListOfAssignmentsDue(ag) {
   return (listOfAssignmentsDue);
 }
 
-//===================================
-// Actual code
-//===================================
+//============================================================================
+// getLearnerData()
+//
+// The bulk of the work is done here!
+//============================================================================
+
+function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 { 
-  // Interator through all assignents and invoke callback function
-  function iterateAssignments(assignmentGroup, callbackFunction, parametersToCallbackFunction) {
+  // The output of this function is stored in this array of objects
+  resultList = [];
 
-    // Go through assignment list
-    for (const assignment of assignmentGroup.assignments) {
-      console.log(`Iterating assignment ${assignment.id}`);
+  // Get list of students (learners)
+  let learnerList = getListOfLearners(LearnerSubmissions);
+  console.log(`learner list = ${learnerList}`);
 
-      // If callback, then invoke it
-      if (callbackFunction)
-        callbackFunction.apply(this, assignment, parametersToCallbackFunction);
-    }
-  }
-
-  // Interator through all students and invoke callback function
-  function iterateStudents(students, callbackFunction, parametersToCallbackFunction) {
-
-    // Go through assignment list
-    for (const student of students) {
-      console.log(`Iterating student id ${student}`);
-
-      // If callback, then invoke it
-      if (callbackFunction)
-        callbackFunction.apply(this, student, parametersToCallbackFunction);
-    }
-  }
-
-  // Callback functions
-  function assignmentCallback(assignment) {
-    console.log(`Callback: assignment ID = ${assignment.id}`);
-  }
-
-  function studentCallback(studentId) {
-    console.log(`Callback: student ID = ${studentId}`);
-
-    resultList.push( { "id": studentId });
-  }
-  
-  function iterateDueAssignments(assignmentGroup, dueAssignments, callbackFunction, parametersToCallbackFunction)
-  {
-    // Go through assignment list
-    for (n in dueAssignments) {
-      callbackFunction.apply(assignmentGroup, assignmentGroup.assignments[n].id, parametersToCallbackFunction);
-    } 
-  }
-
-  function processAssignments(assignmentGroup, dueAssignments, learnerList, learnerSubmissions) {
+  // Get list of assignments that are due now
+  let dueAssignments = getListOfAssignmentsDue(AssignmentGroup);
+  console.log(`Due assignment list = ${dueAssignments}`);
 
   debugger;
   console.log(`${dueAssignments} ${learnerList}`);
-
-  // Results
-  resultList = [];
 
   // For each student (learner)
   for (l of learnerList) {
@@ -409,7 +390,7 @@ function getListOfAssignmentsDue(ag) {
 
             // Make sure points possible > 0
             if (a.points_possible > 0)
-              
+
               // Add it to learner data, round down to 3 decimal places
               learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
             else
@@ -431,34 +412,26 @@ function getListOfAssignmentsDue(ag) {
       resultList.push(learnerData);
       console.log(resultList);
     }
+
+    // Return result list
+    return(resultList);
   }
 
   // verifyHelperFunctions();
 
-  //=========================================================================
-  // Display the start time of this batch
-  //=========================================================================
+  //==========================================================================
+  // Below is the Javascript result 
+  //==========================================================================
 
-  console.log(`Application started at = ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
-  console.log(`This time is used to determine if an assignment is due`);
+  const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+  console.log(`Program result = ${actualResult}`);
 
-  // Get list of students (learners)
-  let learnerList = getListOfLearners(LearnerSubmissions);
-  console.log(`learner list = ${learnerList}`);
+  //==========================================================================
+  // Below is the desired results supplied with the assignment
+  //==========================================================================
 
-  // Get list of assignments that are due now
-  let dueAssignments = getListOfAssignmentsDue(AssignmentGroup);
-  console.log(`Due assignment list = ${dueAssignments}`);
-
-  // Process assignments that are due
-  processAssignments(AssignmentGroup, dueAssignments, learnerList, LearnerSubmissions);
-
-  const desiredResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+  const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   console.log(`Desired result = ${desiredResult}`);
-
-
-  console.log(resultList);
-}
 
 //===================================
 // We are done!
