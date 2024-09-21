@@ -241,6 +241,7 @@ function verifyHelperFunctions() {
 // Build a list of unique individual learners from the learner submissions
 // Create and/or manipulate arrays and objects = 10% of grade.
 function getListOfLearners(LearnerSubmissions) {
+  
   let listOfLearners = [];
 
   // go through the submisison list, add it if not on the list
@@ -454,6 +455,40 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
   const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   console.log(`Desired result:`);
   console.log(desiredResult);
+
+//==========================================================================
+//==========================================================================
+
+const actualDiv = document.getElementById("actualResult");
+const expectDiv = document.getElementById("expectedResult");
+// debugger;
+
+function displayObjectValues(obj, outputDiv) {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+
+      const div = document.createElement('div');
+      div.className = 'object-value';
+
+      const displayValue = Array.isArray(value) ? value.join(`, `) : value;
+
+      // Set the inner html with key and value
+      div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+
+      // Append the div to the output div
+      outputDiv.appendChild(div);
+    }
+  }
+}
+
+{
+  for (i = 0; i < actualResult.length; i++)
+    displayObjectValues(actualResult[i], actualDiv);
+  
+  for (i = 0; i < desiredResult.length; i++)
+    displayObjectValues(desiredResult[i], expectDiv);
+}
 
 //===================================
 // We are done!
