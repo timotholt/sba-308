@@ -121,8 +121,8 @@ function getDesiredLearnerData(course, ag, submissions) {
 // assignment is due or not) 
 //============================================================================
 
-const applicationStartTimestamp = Date.now();
-const applicationStartDatestamp = new Date(applicationStartTimestamp);
+const applicationStartTimestamp = Date.now();                             // Unix time
+const applicationStartDatestamp = new Date(applicationStartTimestamp);    // ASCII string
 
 console.log(`Application started at ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
 console.log(`This time is used to determine if an assignment is due.`);
@@ -326,8 +326,10 @@ function getListOfAssignmentsDue(ag) {
 
 function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 { 
-
-  debugger;
+  // First of all, validate course ID
+  if (!validAssignmentGroupCourseId(assignmentGroup)) {
+    console.log(`ERROR: Invalid course ID in the assignment group`);
+  }
 
   // The output of this function is stored in this array of objects
   resultList = [];
@@ -422,6 +424,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     // Current result list
     console.log(`--Current result list after this pass: (NOTE: only valid if you single step through the debugger)`);
     console.log(`If you run instead of single step, you will see the full results here for both passes.`);
+    console.log('https://stackoverflow.com/questions/11118758/bug-in-console-log');
     console.log(`Result List # rows = ${resultList.length}`);
     console.log(resultList);
   }
