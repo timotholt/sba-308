@@ -124,7 +124,7 @@ function getDesiredLearnerData(course, ag, submissions) {
 const applicationStartTimestamp = Date.now();
 const applicationStartDatestamp = new Date(applicationStartTimestamp);
 
-console.log(`Application started at = ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
+console.log(`Application started at ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
 console.log(`This time is used to determine if an assignment is due.`);
 
 //============================================================================
@@ -180,8 +180,9 @@ function validAssignmentId (assignmentGroup, assignmentId) {
 
   let validResult = false;
 
-  // Use two different types of loops for 5% of the grade (for loop is #1)
-  for (let i = 0; i < assignmentGroup.assignments.length; i++) {
+  // Use two different types of loops for 5% of the grade (while loop is #1)
+  let i = 0;
+  while (i < assignmentGroup.assignments.length) {
 
     // Debug message
     console.log(`comparing ${Number(assignmentGroup.assignments[i].id)} to ${Number(assignmentId)}`);
@@ -193,6 +194,9 @@ function validAssignmentId (assignmentGroup, assignmentId) {
       // 3% of the grade: Utilize at least one loop control keyword such as break or continue.
       break;
     }
+
+    // Bump index
+    i++;
   }
   
   return (validResult);
@@ -241,6 +245,8 @@ function getListOfLearners(LearnerSubmissions) {
   let listOfLearners = [];
 
   // go through the submisison list, add it if not on the list
+  // Use two different types of loops for 5% of the grade (this for loop is #2)
+
   for (const LearnerSubmission of LearnerSubmissions) {
     if (listOfLearners.indexOf(LearnerSubmission.learner_id) < 0)
 
@@ -258,7 +264,7 @@ function getListOfLearners(LearnerSubmissions) {
     // List can't be empty.  We don't use throw/catch here cause it's messy looking
   console.log(listOfLearners.length === 0 ?
     `No learners found in learner submissionslist!` :
-    `List of learners = ${listOfLearners}`);
+    `List of learners (${listOfLearners.length}) by ID = ${listOfLearners}`);
 
   // Return list
   return (listOfLearners);
@@ -267,9 +273,12 @@ function getListOfLearners(LearnerSubmissions) {
 // Build a list of unique assignments
 // Create and/or manipulate arrays and objects = 10% of grade.
 function getListOfAssignmentsDue(ag) {
+
+  console.log(`Below is a list of assignments and their due dates:`);
   let listOfAssignmentsDue = [];
 
   // go through the assignment group, add it if not on the list
+  // for of loop = the 2nd type of loop required that is 
   for (const a of ag.assignments) {
 
     let dueDate = new Date(a.due_at);
@@ -303,7 +312,7 @@ function getListOfAssignmentsDue(ag) {
     // List can't be empty.  We don't use throw/catch here cause it's messy looking
   console.log(listOfAssignmentsDue.length === 0 ?
     `No assignments found in assignment group!` :
-    `List of assignments due on ${applicationStartDatestamp} = ${listOfAssignmentsDue}`);
+    `ID's of assignments that are currently due on ${applicationStartDatestamp} = ${listOfAssignmentsDue}`);
 
   // Return list
   return (listOfAssignmentsDue);
@@ -322,14 +331,9 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
   // Get list of students (learners)
   let learnerList = getListOfLearners(LearnerSubmissions);
-  console.log(`learner list = ${learnerList}`);
 
   // Get list of assignments that are due now
   let dueAssignments = getListOfAssignmentsDue(AssignmentGroup);
-  console.log(`Due assignment list = ${dueAssignments}`);
-
-  debugger;
-  console.log(`${dueAssignments} ${learnerList}`);
 
   // For each student (learner)
   for (l of learnerList) {
@@ -340,83 +344,92 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
     // Start to build learnerData
     let learnerData = {};
+
+    // Add the assignment ID and plug in an average score of 0 to begin with
     learnerData['id'] = l;
     learnerData['avg'] = 0;
-    console.log(learnerData);
+    // console.log(learnerData);
 
     // For each due assignment
     for (d of dueAssignments) {
 
-      console.log(`Processing assignment ${d} for learner ${l}`);
+      console.log(`--Processing assignment ${d} for learner ${l}`);
 
       // Find assignment
       const a = assignmentGroup.assignments.find(obj => obj.id === d);
-      console.log(`Assignment = ${a}`);
+      // console.log(`Assignment = ${a}`);
 
       // If we found it
       if (a != undefined) {
 
-          // Assignment exists, bump up the total possible score
-          totalPossiblePoints += a.points_possible;
+        // Assignment exists, bump up the total possible score
+        totalPossiblePoints += a.points_possible;
 
-          // Now check if the student did the assignment
-          const s = learnerSubmissions.find(obj => obj.learner_id === l && obj.assignment_id === d)
-          console.log(`Submission = ${s}`);
+        // Now check if the student did the assignment
+        const s = learnerSubmissions.find(obj => obj.learner_id === l && obj.assignment_id === d)
+        // console.log(`Submission = ${s}`);
 
-          // By default the assignment is worth 100% (no penalty)
-          let assignmentPenalty = 0;
+        // By default the assignment is worth 100% (no penalty)
+        let assignmentPenalty = 0;
 
-          // If the student submitted the assignment
-          if (s != undefined) {
-            console.log(s);
+        // If the student submitted the assignment
+        if (s != undefined) {
+          // console.log(s);
 
-            debugger;
-            let x1 = getTimestamp(s.submission.submitted_at);
-            let x2 = getTimestamp(a.due_at);
-            console.log(`submitted ${x1} due ${x2}`)
+          // If the assignment is late, assign a penalty . . .
+          if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
+            console.log(`Assignment is late!`);
 
-            if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
-              console.log(`assignment is late!`);
-
-              // Assign a 10% points possible penalty
-              assignmentPenalty = a.points_possible * 0.10;
-            }
-
-            // Calculate score (with any penalties), rounded down to 3 decimal places
-            let netAssignmentScore = Number((s.submission.score - assignmentPenalty).toFixed(3));
-
-            // Bump up the # of points earned
-            totalEarnedPoints += netAssignmentScore;
-
-            // Make sure points possible > 0
-            if (a.points_possible > 0)
-
-              // Add it to learner data, round down to 3 decimal places
-              learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
-            else
-              console.log(`Points possible on an assignment must be > 0`);
-
-            console.log(`Total earned points for learner ${l} = ${totalEarnedPoints}`);
+            // Penalty = 10% of maximum points
+            assignmentPenalty = a.points_possible * 0.10;
           }
+
+          // Calculate score (with any penalties), rounded down to 3 decimal places
+          let netAssignmentScore = Number((s.submission.score - assignmentPenalty).toFixed(3));
+
+          // Bump up the # of points earned
+          totalEarnedPoints += netAssignmentScore;
+
+          // Make sure points possible > 0
+          if (a.points_possible > 0)
+
+            // Add it to learner data, round down to 3 decimal places
+            learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
+          else
+            console.log(`Points possible on an assignment must be > 0`);
+
+          console.log(`--Total earned points for learner ${l} = ${totalEarnedPoints}`);
         }
       }
-
-      console.log(`Total points possible for learner ${l} is ${totalPossiblePoints}`);
-
-      // Calculate average and save it
-      let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
-      learnerData['avg'] = average;
-      console.log(`${learnerData}`);
-
-      // Add learner data to result list
-      resultList.push(learnerData);
-      console.log(resultList);
     }
 
-    // Return result list
-    return(resultList);
+    console.log(`--Total points possible for learner ${l} is ${totalPossiblePoints}`);
+
+    // Calculate average and save it
+    let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
+    learnerData['avg'] = average;
+
+    // Display data
+    console.log(`--Learner ${l}'s data:`);
+    console.log(learnerData);
+
+    // Add learner data to result list
+    resultList.push(learnerData);
+    
+    // Current result list
+    console.log(`--Current result list after this pass:`);
+    console.log(resultList);
   }
 
+  // Return result list
+  return(resultList);
+}
+
+  //==========================================================================
+  // Here is the main() of the app... if there was such a thing in js.
+  //==========================================================================
+
+  // You can verify that the helper functions work by uncommenting this below.
   // verifyHelperFunctions();
 
   //==========================================================================
