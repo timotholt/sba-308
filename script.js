@@ -326,6 +326,9 @@ function getListOfAssignmentsDue(ag) {
 
 function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 { 
+
+  debugger;
+
   // The output of this function is stored in this array of objects
   resultList = [];
 
@@ -353,7 +356,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     // For each due assignment
     for (d of dueAssignments) {
 
-      console.log(`--Processing assignment ${d} for learner ${l}`);
+      console.log(`[Processing assignment ${d} for learner ${l}]`);
 
       // Find assignment
       const a = assignmentGroup.assignments.find(obj => obj.id === d);
@@ -378,7 +381,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
           // If the assignment is late, assign a penalty . . .
           if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
-            console.log(`Assignment is late!`);
+            console.log(`Learner ${l}'s assignment ${d} is late!`);
 
             // Penalty = 10% of maximum points
             assignmentPenalty = a.points_possible * 0.10;
@@ -398,12 +401,12 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
           else
             console.log(`Points possible on an assignment must be > 0`);
 
-          console.log(`--Total earned points for learner ${l} = ${totalEarnedPoints}`);
+          console.log(`--Earned points for assignment ${d} by learner ${l} = ${totalEarnedPoints}`);
         }
       }
     }
 
-    console.log(`--Total points possible for learner ${l} is ${totalPossiblePoints}`);
+    console.log(`--Total points possible for assignments ${dueAssignments} by learner ${l} is ${totalPossiblePoints}`);
 
     // Calculate average and save it
     let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
@@ -417,7 +420,9 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     resultList.push(learnerData);
     
     // Current result list
-    console.log(`--Current result list after this pass:`);
+    console.log(`--Current result list after this pass: (NOTE: only valid if you single step through the debugger)`);
+    console.log(`If you run instead of single step, you will see the full results here for both passes.`);
+    console.log(`Result List # rows = ${resultList.length}`);
     console.log(resultList);
   }
 
@@ -437,14 +442,16 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
   //==========================================================================
 
   const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  console.log(`Program result = ${actualResult}`);
+  console.log(`Program result:`);
+  console.log(actualResult);
 
   //==========================================================================
   // Below is the desired results supplied with the assignment
   //==========================================================================
 
   const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  console.log(`Desired result = ${desiredResult}`);
+  console.log(`Desired result:`);
+  console.log(desiredResult);
 
 //===================================
 // We are done!
