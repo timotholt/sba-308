@@ -297,7 +297,6 @@ function getListOfAssignmentsDue(ag) {
 // Actual code
 //===================================
 { 
-
   // Interator through all assignents and invoke callback function
   function iterateAssignments(assignmentGroup, callbackFunction, parametersToCallbackFunction) {
 
@@ -408,9 +407,14 @@ function getListOfAssignmentsDue(ag) {
             // Bump up the # of points earned
             totalEarnedPoints += netAssignmentScore;
 
-            // Add it to learner data, round down to 3 decimal places
-            learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
-            
+            // Make sure points possible > 0
+            if (a.points_possible > 0)
+              
+              // Add it to learner data, round down to 3 decimal places
+              learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
+            else
+              console.log(`Points possible on an assignment must be > 0`);
+
             console.log(`Total earned points for learner ${l} = ${totalEarnedPoints}`);
           }
         }
