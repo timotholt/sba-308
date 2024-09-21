@@ -80,7 +80,7 @@ const CourseInfo = {
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
-    const result = [
+    const desiredResult = [
       {
         id: 125,
         avg: 0.985, // (47 + 150) / (50 + 150)
@@ -95,12 +95,10 @@ const CourseInfo = {
       }
     ];
   
-    return result;
+    return desiredResult;
   }
   
-  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
-  console.log(result);
 
 
 //=======================================================================================
@@ -299,8 +297,6 @@ function getListOfAssignmentsDue(ag) {
 // Actual code
 //===================================
 { 
-  // Results
-  resultList = [];
 
   // Interator through all assignents and invoke callback function
   function iterateAssignments(assignmentGroup, callbackFunction, parametersToCallbackFunction) {
@@ -349,7 +345,11 @@ function getListOfAssignmentsDue(ag) {
 
   function processAssignments(assignmentGroup, dueAssignments, learnerList, learnerSubmissions) {
 
+  debugger;
   console.log(`${dueAssignments} ${learnerList}`);
+
+  // Results
+  resultList = [];
 
   // For each student (learner)
   for (l of learnerList) {
@@ -357,52 +357,76 @@ function getListOfAssignmentsDue(ag) {
     // Reset the score board
     let totalPossiblePoints = 0;
     let totalEarnedPoints = 0;
-  
+
+    // Start to build learnerData
+    let learnerData = {};
+    learnerData['id'] = l;
+    learnerData['avg'] = 0;
+    console.log(learnerData);
+
     // For each due assignment
     for (d of dueAssignments) {
 
       console.log(`Processing assignment ${d} for learner ${l}`);
 
       // Find assignment
-      const result = assignmentGroup.assignments.find(obj => obj.id === d);
-      console.log(`result = ${result}`);
+      const a = assignmentGroup.assignments.find(obj => obj.id === d);
+      console.log(`Assignment = ${a}`);
 
       // If we found it
-      if (result != undefined) {
+      if (a != undefined) {
 
-          // Bump up the total possible score
-          totalPossiblePoints += result.points_possible;
+          // Assignment exists, bump up the total possible score
+          totalPossiblePoints += a.points_possible;
 
           // Now check if the student did the assignment
-          const result2 = learnerSubmissions.find(obj => obj.learner_id === l && obj.assignment_id === d)
-          console.log(`result2 = ${result2}`);
+          const s = learnerSubmissions.find(obj => obj.learner_id === l && obj.assignment_id === d)
+          console.log(`Submission = ${s}`);
+
+          // By default the assignment is worth 100% (no penalty)
+          let assignmentPenalty = 0;
 
           // If the student submitted the assignment
-          let assignmentValue = 1;
+          if (s != undefined) {
+            console.log(s);
 
-          if (result2 != undefined) {
-            console.log(result2);
+            debugger;
+            let x1 = getTimestamp(s.submission.submitted_at);
+            let x2 = getTimestamp(a.due_at);
+            console.log(`submitted ${x1} due ${x2}`)
 
-            if (getTimestamp(result2.submission.submitted_at) > getTimestamp(result.due_at)) {
+            if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
               console.log(`assignment is late!`);
 
-              // Deduct 10%
-              assignmentValue = 0.9;
+              // Assign a 10% points possible penalty
+              assignmentPenalty = a.points_possible * 0.10;
             }
 
+            // Calculate score (with any penalties), rounded down to 3 decimal places
+            let netAssignmentScore = Number((s.submission.score - assignmentPenalty).toFixed(3));
+
             // Bump up the # of points earned
-            totalEarnedPoints += (result2.submission.score * assignmentValue);
+            totalEarnedPoints += netAssignmentScore;
+
+            // Add it to learner data, round down to 3 decimal places
+            learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
+            
             console.log(`Total earned points for learner ${l} = ${totalEarnedPoints}`);
           }
         }
-
-        // Check to see if the student actually did the assignment
-        // for (a = 0; a < learnerSubmmissions)
       }
 
       console.log(`Total points possible for learner ${l} is ${totalPossiblePoints}`);
-    }
 
+      // Calculate average and save it
+      let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
+      learnerData['avg'] = average;
+      console.log(`${learnerData}`);
+
+      // Add learner data to result list
+      resultList.push(learnerData);
+      console.log(resultList);
+    }
   }
 
   // verifyHelperFunctions();
@@ -422,12 +446,13 @@ function getListOfAssignmentsDue(ag) {
   let dueAssignments = getListOfAssignmentsDue(AssignmentGroup);
   console.log(`Due assignment list = ${dueAssignments}`);
 
-  debugger;
-
   // Process assignments that are due
   processAssignments(AssignmentGroup, dueAssignments, learnerList, LearnerSubmissions);
 
-  debugger;
+  const desiredResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+  console.log(`Desired result = ${desiredResult}`);
+
+
   console.log(resultList);
 }
 
