@@ -1,12 +1,11 @@
 //============================================================================
 // SBA-308
-//
 //============================================================================
 
 console.log(`Hello from script.js`);
 
 //============================================================================
-// The following objects are from the assignment
+// The following objects are from the assignment and must not be changed.
 //============================================================================
 
 // The provided course information.
