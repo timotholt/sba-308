@@ -32,9 +32,10 @@ body {
   width: min-content;
   grid-template-areas:
       'header header header'
-      'class assignments submissions'
+      'course assignments submissions'
       'console console console'
-      'calculated expected actual';
+      'calculated expected actual'
+      'blank rawExpected rawActual';
   gap: 1em;
 }
 
@@ -51,7 +52,7 @@ body {
   padding: 0.5em 0em 0.0em 0em;
 }
 
-#title, #lessons, #class, #assignments, #submissions, #expectedResult, #actualResult, #console {
+#title, #lessons, #course, #assignments, #submissions, #expectedResult, #actualResult, #rawExpected, #rawActual, #console {
   background-color: #400040;
   text-align: center;
   color: #f0f0f0;
@@ -97,7 +98,7 @@ body {
   font-size: 1.3em;
 }
 
-#expectedResult, #actualResult, #calculated, #class, #assignments, #submissions {
+#expectedResult, #rawExpected, #actualResult, #rawActual, #calculated, #course, #assignments, #submissions {
   margin-top: 0.5em;
   background-color: #600060;
   font-weight: normal;
@@ -141,14 +142,34 @@ body {
   padding: 1em;
 }
 
-#class {
-  grid-area: class;
+#course {
+  grid-area: course;
   margin-top: 0.5em;
+
+  /* Make each item a single row */
+  grid-template-columns: 1fr;
+  text-align: left;
+  padding: 1em;  
+
+  /* Make the submissions scroll, and style the scrollbar */
+  overflow-y: auto;
+  max-height: 20em;
+  scrollbar-color: #A0A0A0 #600060;    
 }
 
 #assignments {
   grid-area: assignments;
   margin-top: 0.5em;
+
+  /* Make each item a single row */
+  grid-template-columns: 1fr;
+  text-align: left;
+  padding: 1em;  
+
+  /* Make the submissions scroll, and style the scrollbar */
+  overflow-y: auto;
+  max-height: 20em;
+  scrollbar-color: #A0A0A0 #600060;  
 }
 
 #submissions {
@@ -159,7 +180,43 @@ body {
   grid-template-columns: 1fr;
   text-align: left;
   padding: 1em;  
+
+  /* Make the submissions scroll, and style the scrollbar */
+  overflow-y: auto;
+  max-height: 20em;
+  scrollbar-color: #A0A0A0 #600060;  
 }
+
+#rawExpected {
+  grid-area: rawExpected;
+  margin-top: 0.5em;
+
+  /* Make each item a single row */
+  grid-template-columns: 1fr;
+  text-align: left;
+  padding: 1em;  
+
+  /* Make the submissions scroll, and style the scrollbar */
+  overflow-y: auto;
+  max-height: 20em;
+  scrollbar-color: #A0A0A0 #600060;  
+}
+
+#rawActual {
+  grid-area: rawActual;
+  margin-top: 0.5em;
+
+  /* Make each item a single row */
+  grid-template-columns: 1fr;
+  text-align: left;
+  padding: 1em;  
+
+  /* Make the submissions scroll, and style the scrollbar */
+  overflow-y: auto;
+  max-height: 20em;
+  scrollbar-color: #A0A0A0 #600060;  
+}
+
 
 .object-value {
   padding-top: 2px;

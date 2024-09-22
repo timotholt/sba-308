@@ -550,10 +550,14 @@ function displayObject(obj, outputDiv) {
   }
 }
 
-
-//==============
-// V2
-//==============
+//============================================================================
+// displayDataType()
+//
+// -- This function takes an object/array/primative data type, and adds it
+// to the appropriate DIV.  It is recursive and it's pretty neat.
+//
+// I wrote this one myself =)
+//============================================================================
 
 // Helper functions
 const isArray = (value) => {
@@ -643,6 +647,12 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
 
       // Basic types are easy to handle
       case "string": 
+        if (keyName)
+          outputSingleDiv(`${indentString}${keyName} : "${item}"`, trailingComma, outputDiv);
+        else
+          outputSingleDiv(`${indentString}"${item}"`, trailingComma, outputDiv);
+        break;
+
       case "number":
       case "bigint":
       case "boolean":
@@ -679,9 +689,17 @@ div.className = 'object-value';
 div.innerHTML += `Learners: ${getListOfLearners(LearnerSubmissions, true)}`;
 calculatedDiv.appendChild(div);
 
+// Display course group
+const courseDiv = document.getElementById("course");
+displayDataType(CourseInfo, null, ``, ``, courseDiv);
+
+// Display assignment group
+const assignmentsDiv = document.getElementById("assignments");
+displayDataType(AssignmentGroup, null, ``, ``, assignmentsDiv);
+
 // Display submissions
-const submissionDiv = document.getElementById("submissions");
-displayDataType(LearnerSubmissions, null, ``, ``, submissionDiv);
+const submissionsDiv = document.getElementById("submissions");
+displayDataType(LearnerSubmissions, null, ``, ``, submissionsDiv);
 
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
@@ -727,6 +745,13 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
   console.log(`]`);  
 }
 
+// Display raw actual data
+const rawActualDiv = document.getElementById("rawActual");
+displayDataType(actualResult, null, ``, ``, rawActualDiv);
+
+// Display raw expected data
+const rawExpectedDiv = document.getElementById("rawExpected");
+displayDataType(desiredResult, null, ``, ``, rawExpectedDiv);
 
 
 //===================================
