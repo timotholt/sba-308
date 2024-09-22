@@ -410,12 +410,11 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
             learnerData[d] = submissionAve;
 
             // Write it to the console
-            console.log(`&nbsp;&nbsp;Learner ${l}'s average for assignment ${d} is ${submissionAve}`);
+            console.log(`&nbsp;&nbsp;Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
+            console.log(`&nbsp;&nbsp;Learner ${l}'s average for assignment ${d} is ${submissionAve} (${netAssignmentScore} / ${a.points_possible} = ${submissionAve})`);
           }
           else
             console.log(`Points possible on an assignment must be > 0`);
-
-          console.log(`&nbsp;&nbsp;Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
         }
       }
     }
@@ -426,7 +425,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     // Calculate average and save it
     let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
     learnerData['avg'] = average;
-    console.log(`&nbsp;&nbsp;Learner ${l} average is ${average} (${totalEarnedPoints} / ${totalPossiblePoints})\n`);
+    console.log(`&nbsp;&nbsp;Learner ${l} average is ${average} (${totalEarnedPoints} / ${totalPossiblePoints} = ${average})\n`);
 
     // Display data
     // console.log(`--Learner ${l}'s data:`);
@@ -584,7 +583,7 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
   console.log(`]`);  
 
   // Output the desired learner results
-  console.log(`The desired result of the appliation is ${actualResult.length} objects:`);
+  console.log(`\n And the desired result of the appliation is ${actualResult.length} objects:`);
   console.log(`[`);  
   for (let i = 0; i < desiredResult.length; i++) {
     console.log(`&nbsp;&nbsp;{`);
