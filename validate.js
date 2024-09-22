@@ -1,5 +1,8 @@
 //====================================================================
 // Validation functions
+//
+//
+// This file can be cleaned up but I have bigger fish to fry!
 //====================================================================
 
 const validDate = (dateString) => !isNaN(Date.parse(dateString));
@@ -78,8 +81,8 @@ function validAssignmentId (assignmentGroup, assignmentId) {
 // 1. courseInfo is an object
 // 2. courseInfo.id is an number
 // 3. courseInfo.id is greater than zero
-// 3. courseInfo.name is a string
-// 4. courseInfo has exactly 2 keys
+// 4. courseInfo.name is a string
+// 5. courseInfo has exactly 2 keys
 //
 // Returns true if it passes validation()
 //==================================================================

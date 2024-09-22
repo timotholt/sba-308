@@ -134,6 +134,7 @@ console.log('Note: Assuming all assignent times in the sample data are in GST an
 function getListOfLearners(LearnerSubmissions, quiet = false) {
   
   let listOfLearners = [];
+  let listOfLearners2 = [];
 
   // go through the submisison list, add it if not on the list
   // Use two different types of loops for 5% of the grade (this for loop is #2)
@@ -159,8 +160,15 @@ function getListOfLearners(LearnerSubmissions, quiet = false) {
       `${listOfLearners.length} learners submitted assignments. Their IDs are ${listOfLearners}\n`);
   }
 
+  // Prove we can create/modify/delete lists by copying the list of learners from one array to another
+  // We also get to use a do / while loop
+  do {
+    let l = listOfLearners.shift();
+    listOfLearners2.push(l);
+  } while (listOfLearners.length > 0)
+
   // Return list
-  return (listOfLearners);
+  return (listOfLearners2);
 }
 
 // Build a list of unique assignments
