@@ -583,8 +583,6 @@ function outputSingleDiv(s, trailingComma, outputDiv) {
 
 function displayDataType(item, keyName, indentString, trailingComma, outputDiv) {
 
-  debugger;
-
   // Handle arrays
   if (isArray(item)) {
 
@@ -710,8 +708,6 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
   // DIV IDs to write the actual and expected results to
   const actualDiv = document.getElementById("actualResult");
   const expectDiv = document.getElementById("expectedResult");  
-
-  debugger;
 
   // Output the actual learner results
   console.log(`getLearnerData() produced ${actualResult.length} objects:`);
