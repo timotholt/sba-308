@@ -242,7 +242,7 @@ function verifyHelperFunctions() {
 
 // Build a list of unique individual learners from the learner submissions
 // Create and/or manipulate arrays and objects = 10% of grade.
-function getListOfLearners(LearnerSubmissions) {
+function getListOfLearners(LearnerSubmissions, quiet = false) {
   
   let listOfLearners = [];
 
@@ -264,9 +264,11 @@ function getListOfLearners(LearnerSubmissions) {
   listOfLearners.sort((a, b) => a - b);
 
     // List can't be empty.  We don't use throw/catch here cause it's messy looking
-  console.log(listOfLearners.length === 0 ?
-    `No learners found in learner submissionslist!` :
-    `${listOfLearners.length} learners submitted assignments. Their IDs are ${listOfLearners}\n`);
+  if (!quiet) {
+    console.log(listOfLearners.length === 0 ?
+      `No learners found in learner submissionslist!` :
+      `${listOfLearners.length} learners submitted assignments. Their IDs are ${listOfLearners}\n`);
+  }
 
   // Return list
   return (listOfLearners);
@@ -274,9 +276,11 @@ function getListOfLearners(LearnerSubmissions) {
 
 // Build a list of unique assignments
 // Create and/or manipulate arrays and objects = 10% of grade.
-function getListOfAssignmentsDue(ag) {
+function getListOfAssignmentsDue(ag, quiet = false) {
 
-  console.log(`Below is a list of assignments and their due dates:`);
+  if (!quiet)
+    console.log(`Below is a list of assignments and their due dates:`);
+  
   let listOfAssignmentsDue = [];
 
   // go through the assignment group, add it if not on the list
@@ -289,12 +293,14 @@ function getListOfAssignmentsDue(ag) {
     // dueDate = 'laksjdf;lakjsdfl;akjsdflkjadfs'
     
     // Check if due date is bogus
-    if (!validDate(dueDate))
-      console.log(`Due date ${dueDate} is not valid.`);
-
+    if (!validDate(dueDate)) {
+      if (!quiet)
+        console.log(`Due date ${dueDate} is not valid.`);
+    }
     // If due date is legit, and it's due, add it to the assignment due list
     else {
-      console.log(`Assignment ${a.id} is due at ${dueDate}`);
+      if (!quiet)
+        console.log(`Assignment ${a.id} is due at ${dueDate}`);
 
       if (applicationStartTimestamp >= getTimestamp(dueDate))
         if (listOfAssignmentsDue.indexOf(a.id) < 0)
@@ -312,12 +318,14 @@ function getListOfAssignmentsDue(ag) {
   listOfAssignmentsDue.sort((a, b) => a - b);
 
   // List can't be empty.  We don't use throw/catch here cause it's messy looking
-  console.log(``);
-  console.log(listOfAssignmentsDue.length === 0 ?
-    `No assignments found in assignment group!` :
-    `Based upon the application start time of ${applicationStartDatestamp},\n`+
-    `the following assigments are currently due: ${listOfAssignmentsDue}\n`);
-
+  if (!quiet) {
+    console.log(``);
+    console.log(listOfAssignmentsDue.length === 0 ?
+      `No assignments found in assignment group!` :
+      `Based upon the application start time of ${applicationStartDatestamp},\n`+
+      `the following assigments are currently due: ${listOfAssignmentsDue}\n`);
+  }
+  
   // Return list
   return (listOfAssignmentsDue);
 }
@@ -552,10 +560,12 @@ let div = document.createElement(`div`);
 div.innerHTML = `Course ${CourseInfo.id}: ${CourseInfo.name}`;
 titleDiv.appendChild(div);
 
-// Display lessons in HTML
-const lessonDiv = document.getElementById("lessons");
+// Display calculated data in HTML
+const calculatedDiv = document.getElementById("calculated");
 div = document.createElement(`div`);
-displayObject(LearnerSubmissions[0], lessonDiv);
+div.innerHTML = `Assignments due: ${getListOfAssignmentsDue(AssignmentGroup, true)}\n`;
+div.innerHTML += `Learners: ${getListOfLearners(LearnerSubmissions, true)}`;
+calculatedDiv.appendChild(div);
 
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
