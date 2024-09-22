@@ -7,12 +7,19 @@ Runtime address: https://timotholt.github.io/sba-308/
 
 ======================================================================
 
-THE INDEX.HTML web page is actually useful and produces useful results!!
+This SBA project actually has a real user interface in index.html
+
+The app dynamically parses the structures CourseInfo, AssignmentGroup,
+and SubmissionData and present it in the html page. The console.log is
+also fed into the html page so provide a single user experience for
+the whole app.
+
+Notes:
 
 In the assignment notes, the assignment requirements is to log the data
 to the console. I overrode the console.log() function so that all
 console.log() ouputs get sent to BOTH the standard console.log() function
-AND are written to the index.html.
+AND written to the console window in index.html.
 
 ![Alt text](https://github.com/timotholt/sba-308/blob/main/Screenshot%202024-09-22%20113037.png)
 
@@ -35,6 +42,18 @@ Requirements Tracking
 | Commit frequently to the git repository. | 5% | ✅ |
 | Include a README file that contains a description of your application. | 2% | ✅ |
 | Total | 100% | |
+
+This project includes a bunch of files:
+
+| *Filename* | *Purpose* |
+| :--- | :--- |
+| index.html | all the DIVs used for dynamically populating the UI |
+| script.js | the usual suspect for storing the bulk of the working code | 
+| style.css | the usual style sheet suspect |
+| validate.js | where we validate the integrity of the data structures  |
+| replaceconsole.js | override console.log so we can output as HTML and the debugger window |
+| displayhtml.js | where we populate the div's with our actual data and handling the "live" console window |
+
 
 Thanks!
 
