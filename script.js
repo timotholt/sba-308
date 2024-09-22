@@ -574,23 +574,16 @@ function createChildDivFromString(divID, s, optionalChildClass)
 //============================================================================
 // displayDataType()
 //
-// -- This function takes an object/array/primative data type, and adds it
-// to the appropriate DIV.  It is recursive and it's pretty neat.
+// This function takes an unknown object/array/primitive data type, walks
+// through it and adds it to the specified div.
+//
+// It is recursive and it's pretty neat.
 //
 // I wrote this one myself =)
 //============================================================================
 
-// Helper functions
-const isArray = (value) => {
-  return Array.isArray(value);
-};
-
-const isObject = (value) => {
-  return !!(value && typeof value === "object" && !Array.isArray(value));
-};
-
 // Write (s) as a single div
-function outputSingleDiv(s, trailingComma, outputDiv) {
+function outputSingleDiv(outputDiv, s, trailingComma) {
 
   const div = document.createElement('div');
   div.className = 'object-value';
@@ -602,9 +595,15 @@ function outputSingleDiv(s, trailingComma, outputDiv) {
   outputDiv.appendChild(div);
 }
 
-function displayDataType(item, keyName, indentString, trailingComma, outputDiv) {
+function displayDataType(outputDiv, item, keyName, indentString, trailingComma) {
 
-  // Handle arrays
+  debugger;
+
+  // Helper functions
+  const isArray = (value) => Array.isArray(value);
+  const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
+
+  // We don't know what kind of object we are passed, so let's see if it's an array
   if (isArray(item)) {
 
     // Get array name
@@ -613,16 +612,16 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
       name += ` `;
 
     // Write out a [
-    outputSingleDiv(`${indentString}${name}[`, ``, outputDiv);
+    outputSingleDiv(outputDiv, `${indentString}${name}[`, ``);
 
     // Traverse every item in the array
     for (let i = 0; i < item.length; i++) {
       let trailingComma = (i < item.length - 1) ? `, ` : ``;
-      displayDataType(item[i], i.toString, indentString + `&nbsp;&nbsp;`, trailingComma, outputDiv);
+      displayDataType(outputDiv, item[i], i.toString, indentString + `&nbsp;&nbsp;`, trailingComma);
     }
 
     // Write out a ]
-    outputSingleDiv(`${indentString}]`, trailingComma, outputDiv);
+    outputSingleDiv(outputDiv, `${indentString}]`, trailingComma);
   }
 
   // Handle objects
@@ -634,7 +633,7 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
       name += ` `;
 
     // Write out a {
-    outputSingleDiv(`${indentString}${name}{`, ``, outputDiv);
+    outputSingleDiv(outputDiv, `${indentString}${name}{`, ``);
 
     // Get all keys of this object
     let keys = Object.keys(item);
@@ -647,12 +646,12 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
         const value = item[keys[i]];
 
         let trailingComma = (i < keys.length - 1) ? `, ` : ``;
-        displayDataType(item[keys[i]], keys[i], indentString + `&nbsp;&nbsp;`, trailingComma, outputDiv);
+        displayDataType(outputDiv, item[keys[i]], keys[i], indentString + `&nbsp;&nbsp;`, trailingComma);
       }
     }
     
     // Write out a }
-    outputSingleDiv(`${indentString}}`, trailingComma, outputDiv);
+    outputSingleDiv(outputDiv, `${indentString}}`, trailingComma);
   }
 
   // Handle primative data types
@@ -667,9 +666,9 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
       // Basic types are easy to handle
       case "string": 
         if (keyName)
-          outputSingleDiv(`${indentString}${keyName} : "${item}"`, trailingComma, outputDiv);
+          outputSingleDiv(outputDiv, `${indentString}${keyName} : "${item}"`, trailingComma);
         else
-          outputSingleDiv(`${indentString}"${item}"`, trailingComma, outputDiv);
+          outputSingleDiv(outputDiv, `${indentString}"${item}"`, trailingComma);
         break;
 
       case "number":
@@ -678,9 +677,9 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
       case "symbol":
       case "function":
         if (keyName)
-          outputSingleDiv(`${indentString}${keyName} : ${item}`, trailingComma, outputDiv);
+          outputSingleDiv(outputDiv, `${indentString}${keyName} : ${item}`, trailingComma);
         else
-          outputSingleDiv(`${indentString}${item}`, trailingComma, outputDiv);
+          outputSingleDiv(outputDiv, `${indentString}${item}`, trailingComma);
         break;
       }
   }
@@ -699,15 +698,15 @@ createChildDivFromString(`calculated`, `Learners: ${getListOfLearners(LearnerSub
 
 // Display course group
 const courseDiv = document.getElementById("course");
-displayDataType(CourseInfo, null, ``, ``, courseDiv);
+displayDataType(courseDiv, CourseInfo, null, ``, ``);
 
 // Display assignment group
 const assignmentsDiv = document.getElementById("assignments");
-displayDataType(AssignmentGroup, null, ``, ``, assignmentsDiv);
+displayDataType(assignmentsDiv, AssignmentGroup, null, ``, ``);
 
 // Display submissions
 const submissionsDiv = document.getElementById("submissions");
-displayDataType(LearnerSubmissions, null, ``, ``, submissionsDiv);
+displayDataType(submissionsDiv, LearnerSubmissions, null, ``, ``);
 
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
@@ -753,12 +752,11 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
 
 // Display raw actual data
 const rawActualDiv = document.getElementById("rawActual");
-displayDataType(actualResult, null, ``, ``, rawActualDiv);
+displayDataType(rawActualDiv, actualResult, null, ``, ``);
 
 // Display raw expected data
 const rawExpectedDiv = document.getElementById("rawExpected");
-displayDataType(desiredResult, null, ``, ``, rawExpectedDiv);
-
+displayDataType(rawExpectedDiv, desiredResult, null, ``, ``);
 
 //===================================
 // We are done!
