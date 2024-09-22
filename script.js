@@ -363,7 +363,6 @@ validateCourseInfo(CourseInfo);
 validateAssignmentGroup(CourseInfo, AssignmentGroup);
 validateSubmissionData(LearnerSubmissions);
 
-debugger;
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
