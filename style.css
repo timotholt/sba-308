@@ -34,8 +34,8 @@ body {
       'header header header'
       'course assignments submissions'
       'console console console'
-      'calculated expected actual'
-      'blank rawExpected rawActual';
+      'calculated rawActual rawExpected';
+      /* 'blank actual expected'; */
   gap: 1em;
 }
 
