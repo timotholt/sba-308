@@ -14,6 +14,8 @@ console. I overrode the console.log() function so that all console.log()
 ouputs get sent to BOTH the standard console.log() function AND are written
 to the index.html.
 
+![Alt text](https://github.com/timotholt/sba-308/blob/main/Screenshot%202024-09-22%20113037.png)
+
 Thanks!
 
 Tim
