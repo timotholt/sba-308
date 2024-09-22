@@ -1,11 +1,6 @@
 //============================================================================
 // SBA-308
-//============================================================================
-
-// Write the first message to the console
-//console.log(`Hello from script.js`);
-
-//============================================================================
+//
 // The following objects are from the assignment and must not be changed.
 //============================================================================
 
@@ -551,6 +546,32 @@ function displayObject(obj, outputDiv) {
 }
 
 //============================================================================
+// createChildDivFromString()
+//
+// Easy way to find a div by name, and add a child div with text in it
+//============================================================================
+
+function createChildDivFromString(divID, s, optionalChildClass)
+{
+  // Find parent Div
+  const parentDiv = document.getElementById(divID);
+
+  // Create child Div
+  const childDiv = document.createElement(`div`);
+
+  // Add an optional class name
+  if (optionalChildClass)
+    childDiv.className = optionalChildClass;
+
+  // Set text of child
+  childDiv.innerHTML = s;
+
+  // Append child to parent
+  parentDiv.appendChild(childDiv);
+}
+
+
+//============================================================================
 // displayDataType()
 //
 // -- This function takes an object/array/primative data type, and adds it
@@ -670,22 +691,11 @@ function displayDataType(item, keyName, indentString, trailingComma, outputDiv) 
 //==========================================================================
 
 // Display title in HTML
-const titleDiv = document.getElementById("title");
-let div = document.createElement(`div`);
-div.innerHTML = `Course ${CourseInfo.id}: ${CourseInfo.name}`;
-titleDiv.appendChild(div);
+createChildDivFromString(`title`, `Course ${CourseInfo.id}: ${CourseInfo.name}`);
 
-// Display calculated data in HTML
-const calculatedDiv = document.getElementById("calculated");
-div = document.createElement(`div`);
-div.className = 'object-value';
-div.innerHTML = `Assignments due: ${getListOfAssignmentsDue(AssignmentGroup, true)}`;
-calculatedDiv.appendChild(div);
-
-div = document.createElement(`div`);
-div.className = 'object-value';
-div.innerHTML += `Learners: ${getListOfLearners(LearnerSubmissions, true)}`;
-calculatedDiv.appendChild(div);
+// Display calculated data
+createChildDivFromString(`calculated`, `Assignments due: ${getListOfAssignmentsDue(AssignmentGroup, true)}`, `object-value`);
+createChildDivFromString(`calculated`, `Learners: ${getListOfLearners(LearnerSubmissions, true)}`, `object-value`);
 
 // Display course group
 const courseDiv = document.getElementById("course");
