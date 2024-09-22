@@ -125,7 +125,8 @@ const applicationStartTimestamp = Date.now();                             // Uni
 const applicationStartDatestamp = new Date(applicationStartTimestamp);    // ASCII string
 
 console.log(`Application started at ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time).`);
-console.log(`This time is used to determine if an assignment is due.\n`);
+console.log(`This time is used to determine if an assignment is due.`);
+console.log('Note: Assuming all assignent times in the sample data are in GST and converting them to local time.\n');
 
 //============================================================================
 // Application specific helper functions
@@ -314,7 +315,8 @@ function getListOfAssignmentsDue(ag) {
   console.log(``);
   console.log(listOfAssignmentsDue.length === 0 ?
     `No assignments found in assignment group!` :
-    `Based upon the application start time, the following assigments are currently due on\n${applicationStartDatestamp} = ${listOfAssignmentsDue}\n`);
+    `Based upon the application start time of ${applicationStartDatestamp},\n`+
+    `the following assigments are currently due: ${listOfAssignmentsDue}\n`);
 
   // Return list
   return (listOfAssignmentsDue);
@@ -345,6 +347,9 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
   // For each student (learner)
   for (l of learnerList) {
 
+    // Log the learner #
+    console.log(`Processing submissions for learner ID ${l}`);
+
     // Reset the score board
     let totalPossiblePoints = 0;
     let totalEarnedPoints = 0;
@@ -360,7 +365,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     // For each due assignment
     for (d of dueAssignments) {
 
-      console.log(`[Processing assignment ${d} for learner ${l}]`);
+      // console.log(`+-Processing Learner ${l} assigment ${d}`);
 
       // Find assignment
       const a = assignmentGroup.assignments.find(obj => obj.id === d);
@@ -385,7 +390,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
           // If the assignment is late, assign a penalty . . .
           if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
-            console.log(`Learner ${l}'s assignment ${d} is late!`);
+            console.log(`&nbsp;&nbsp;Learner ${l}'s assignment ${d} is late!`);
 
             // Penalty = 10% of maximum points
             assignmentPenalty = a.points_possible * 0.10;
@@ -398,65 +403,60 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
           totalEarnedPoints += netAssignmentScore;
 
           // Make sure points possible > 0
-          if (a.points_possible > 0)
+          if (a.points_possible > 0) {
+            let submissionAve = Number((netAssignmentScore / a.points_possible).toFixed(3));
 
             // Add it to learner data, round down to 3 decimal places
-            learnerData[d] = Number((netAssignmentScore / a.points_possible).toFixed(3));
+            learnerData[d] = submissionAve;
+
+            // Write it to the console
+            console.log(`&nbsp;&nbsp;Learner ${l}'s average for assignment ${d} is ${submissionAve}`);
+          }
           else
             console.log(`Points possible on an assignment must be > 0`);
 
-          console.log(`--Earned points for assignment ${d} by learner ${l} = ${totalEarnedPoints}`);
+          console.log(`&nbsp;&nbsp;Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
         }
       }
     }
 
-    console.log(`--Total points possible for assignments ${dueAssignments} by learner ${l} is ${totalPossiblePoints}`);
+    // Output summary for this learner
+    console.log(`&nbsp;&nbsp;Learner ${l} earned a total of ${totalEarnedPoints} points out of a maximum of ${totalPossiblePoints} for assignenments ${dueAssignments}`);
 
     // Calculate average and save it
     let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
     learnerData['avg'] = average;
+    console.log(`&nbsp;&nbsp;Learner ${l} average is ${average} (${totalEarnedPoints} / ${totalPossiblePoints})\n`);
 
     // Display data
-    console.log(`--Learner ${l}'s data:`);
-    console.log(learnerData);
+    // console.log(`--Learner ${l}'s data:`);
+    // console.log(learnerData);
 
     // Add learner data to result list
     resultList.push(learnerData);
     
     // Current result list
-    console.log(`--Current result list after this pass: (NOTE: only valid if you single step through the debugger)`);
-    console.log(`If you run instead of single step, you will see the full results here for both passes.`);
-    console.log('https://stackoverflow.com/questions/11118758/bug-in-console-log');
-    console.log(`Result List # rows = ${resultList.length}`);
-    console.log(resultList);
+    // console.log(`--Current result list after this pass: (NOTE: only valid if you single step through the debugger)`);
+    // console.log(`If you run instead of single step, you will see the full results here for both passes.`);
+    // console.log('https://stackoverflow.com/questions/11118758/bug-in-console-log');
+    // console.log(`Result List # rows = ${resultList.length}`);
+    // console.log(resultList);
   }
 
   // Return result list
   return(resultList);
 }
 
-  //==========================================================================
-  // Here is the main() of the app... if there was such a thing in js.
-  //==========================================================================
+//==========================================================================
+// Here is the main() of the app... if there was such a thing in js.
+//==========================================================================
 
-  // You can verify that the helper functions work by uncommenting this below.
-  // verifyHelperFunctions();
+// You can verify that the helper functions work by uncommenting this below.
+// verifyHelperFunctions();
 
-  //==========================================================================
-  // Below is the Javascript result 
-  //==========================================================================
-
-  const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  console.log(`Program result:`);
-  console.log(actualResult);
-
-  //==========================================================================
-  // Below is the desired results supplied with the assignment
-  //==========================================================================
-
-  const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  console.log(`Desired result:`);
-  console.log(desiredResult);
+//==========================================================================
+// Below is the Javascript result 
+//==========================================================================
 
 //==========================================================================
 // displayLearnerObject()
@@ -496,6 +496,27 @@ function displayLearnerData(obj, outputDiv) {
   }
 }
 
+/* Display learner data object to the console */
+function consoleLogLearnerData(obj, indent) {
+
+  const keyOrder = ['id', 'avg'];
+
+  function outputKey(key, indent) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      console.log(`${indent}${key} : ${value}`);
+    }
+  }
+
+  outputKey(`id`, indent);
+  outputKey(`avg`, indent);
+  for (const key in obj) {
+    if (key === `id` || key === `avg`)
+      continue;
+    outputKey(key, indent);
+  }
+}
+
 //============================================================================
 // displayObject()
 //
@@ -526,37 +547,63 @@ function displayObject(obj, outputDiv) {
 // Draw Screen
 //==========================================================================
 
-// Display title
+// Display title in HTML
 const titleDiv = document.getElementById("title");
-console.log(titleDiv);
-
 let div = document.createElement(`div`);
 div.innerHTML = `Course ${CourseInfo.id}: ${CourseInfo.name}`;
 titleDiv.appendChild(div);
 
-// Display lessons
+// Display lessons in HTML
 const lessonDiv = document.getElementById("lessons");
-console.log(lessonDiv);
-
 div = document.createElement(`div`);
 displayObject(LearnerSubmissions[0], lessonDiv);
 
+// Run the app!
+const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+// Write the learner data to the HTML and to the console
 {
+  // DIV IDs to write the actual and expected results to
   const actualDiv = document.getElementById("actualResult");
   const expectDiv = document.getElementById("expectedResult");  
 
-  for (i = 0; i < actualResult.length; i++) {
+  // Output the actual learner results
+  console.log(`getLearnerData() produced ${actualResult.length} objects:`);
+  console.log(`[`);
+  for (let i = 0; i < actualResult.length; i++) {
+    console.log(`&nbsp;&nbsp;{`);
     displayLearnerData(actualResult[i], actualDiv);
+    consoleLogLearnerData(actualResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+
+    if (i < actualResult.length - 1)
+      console.log(`&nbsp;&nbsp;},`);
+    else
+      console.log(`&nbsp;&nbsp;}`);
   }
-  
-  for (i = 0; i < desiredResult.length; i++) {
+  console.log(`]`);  
+
+  // Output the desired learner results
+  console.log(`The desired result of the appliation is ${actualResult.length} objects:`);
+  console.log(`[`);  
+  for (let i = 0; i < desiredResult.length; i++) {
+    console.log(`&nbsp;&nbsp;{`);
     displayLearnerData(desiredResult[i], expectDiv);
+    consoleLogLearnerData(desiredResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+
+    if (i < desiredResult.length - 1)
+      console.log(`&nbsp;&nbsp;},`);
+    else
+      console.log(`&nbsp;&nbsp;}`);
 
   }
+  console.log(`]`);  
 }
+
+
 
 //===================================
 // We are done!
 //===================================
 
-// console.log(`Goodbye from script.js`);
+console.log(`\nApplication complete.`);
