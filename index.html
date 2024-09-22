@@ -8,17 +8,17 @@
 </head>
 <body>
     <div class="gridContainer">
+
+        <!-- These are the divs that we populate in displayhtml.js -->
         <div id="title"></div>
         <div id="consoleContainer">
             Console
             <div id="console"></div>
         </div>
-
         <div class="resultContainer">
             Course
             <div id="course"></div>
         </div>
-
         <div class="resultContainer">
             Assignments
             <div id="assignments"></div>
@@ -27,12 +27,10 @@
             Submissions
             <div id="submissions"></div>
         </div>
-
         <div id="calculatedContainer">
             Calculated Data
             <div id="calculated"></div>
         </div>
-
         <div class="resultContainer">
             Expected Result (Raw)
             <div id="rawExpected"></div>
@@ -41,25 +39,27 @@
             Actual Result (Raw)
             <div id="rawActual"></div>
         </div>
-
         <div id="calculatedContainer">
             Unused
             <div id="unused"></div>
         </div>
-
         <div class="resultContainer">
             Expected Result (Cooked)
             <div id="expectedResult"></div>
         </div>
-
         <div class="resultContainer">
             Actual Result (Cooked)
             <div id="actualResult"></div>
         </div>
     </div>
 
+    <!-- Replace the console so we can output it to the web page -->
     <script src="./replaceconsole.js"></script>
+
+    <!-- This is the heart of the application -->
     <script src="./script.js"></script>
+
+    <!-- Output the results to the webpage -->
     <script src="./displayhtml.js"></script>    
 </body>
 </html>
