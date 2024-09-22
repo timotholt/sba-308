@@ -595,7 +595,7 @@ function outputSingleDiv(outputDiv, s, trailingComma) {
   outputDiv.appendChild(div);
 }
 
-function displayDataType(outputDiv, item, keyName, indentString, trailingComma) {
+function displayDataType(outputDiv, item, keyName = null, indentString = ``, trailingComma = ``) {
 
   debugger;
 
@@ -698,15 +698,15 @@ createChildDivFromString(`calculated`, `Learners: ${getListOfLearners(LearnerSub
 
 // Display course group
 const courseDiv = document.getElementById("course");
-displayDataType(courseDiv, CourseInfo, null, ``, ``);
+displayDataType(courseDiv, CourseInfo);
 
 // Display assignment group
 const assignmentsDiv = document.getElementById("assignments");
-displayDataType(assignmentsDiv, AssignmentGroup, null, ``, ``);
+displayDataType(assignmentsDiv, AssignmentGroup);
 
 // Display submissions
 const submissionsDiv = document.getElementById("submissions");
-displayDataType(submissionsDiv, LearnerSubmissions, null, ``, ``);
+displayDataType(submissionsDiv, LearnerSubmissions);
 
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
