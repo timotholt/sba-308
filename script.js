@@ -457,13 +457,49 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
   console.log(desiredResult);
 
 //==========================================================================
+// displayLearnerObject()
+//
+// Pass this a learner object and it will display it in the way you'd
+// expect: id first, average second, then all the other key/values
 //==========================================================================
 
-const actualDiv = document.getElementById("actualResult");
-const expectDiv = document.getElementById("expectedResult");
-// debugger;
+function displayLearnerData(obj, outputDiv) {
 
-function displayObjectValues(obj, outputDiv) {
+  const keyOrder = ['id', 'avg'];
+
+  function outputKey(key) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+
+      const div = document.createElement('div');
+      div.className = 'object-value';
+
+      const displayValue = Array.isArray(value) ? value.join(`, `) : value;
+
+      // Set the inner html with key and value
+      div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+
+      // Append the div to the output div
+      outputDiv.appendChild(div);
+    }
+  }
+
+  outputKey(`id`);
+  outputKey(`avg`);
+  for (const key in obj) {
+    if (key === `id` || key === `avg`)
+      continue;
+    outputKey(key);
+  }
+}
+
+//============================================================================
+// displayObject()
+//
+// Pass this a learner object and it will display it in some random order
+//============================================================================
+
+function displayObject(obj, outputDiv) {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
@@ -482,12 +518,34 @@ function displayObjectValues(obj, outputDiv) {
   }
 }
 
+//==========================================================================
+// Draw Screen
+//==========================================================================
+
+// Display title
+const titleDiv = document.getElementById("title");
+console.log(titleDiv);
+
+let div = document.createElement(`div`);
+div.innerHTML = `Course ${CourseInfo.id}: ${CourseInfo.name}`;
+titleDiv.appendChild(div);
+
+// Display lessons
+const lessonDiv = document.getElementById("lessons");
+console.log(lessonDiv);
+
+div = document.createElement(`div`);
+displayObject(LearnerSubmissions[0], lessonDiv);
+
 {
+  const actualDiv = document.getElementById("actualResult");
+  const expectDiv = document.getElementById("expectedResult");  
+
   for (i = 0; i < actualResult.length; i++)
-    displayObjectValues(actualResult[i], actualDiv);
+    displayLearnerData(actualResult[i], actualDiv);
   
   for (i = 0; i < desiredResult.length; i++)
-    displayObjectValues(desiredResult[i], expectDiv);
+    displayLearnerData(desiredResult[i], expectDiv);
 }
 
 //===================================
