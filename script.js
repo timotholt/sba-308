@@ -570,7 +570,6 @@ function createChildDivFromString(divID, s, optionalChildClass)
   parentDiv.appendChild(childDiv);
 }
 
-
 //============================================================================
 // displayDataType()
 //
@@ -591,15 +590,19 @@ function displayDataType(outputDiv, item, keyName = null, indentString = ``, tra
   // Write (s) as a single div
   function outputSingleDiv(outputDiv, s, trailingComma) {
 
-    const div = document.createElement('div');
-    div.className = 'object-value';
+    const childDiv = document.createElement('div');
+    childDiv.className = 'object-value';
 
     // Set the inner html with key and value
-    div.innerHTML = s + trailingComma;
+    childDiv.innerHTML = s + trailingComma;
 
     // Append the div to the output div
-    outputDiv.appendChild(div);
+    outputDiv.appendChild(childDiv);
   }
+
+  //=================================================================================
+  // Actual work starts here
+  //=================================================================================
 
   // We don't know what kind of object we are passed, so let's see if it's an array
   if (isArray(item)) {
@@ -750,11 +753,11 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
 
 // Display raw actual data
 const rawActualDiv = document.getElementById("rawActual");
-displayDataType(rawActualDiv, actualResult, null, ``, ``);
+displayDataType(rawActualDiv, actualResult);
 
 // Display raw expected data
 const rawExpectedDiv = document.getElementById("rawExpected");
-displayDataType(rawExpectedDiv, desiredResult, null, ``, ``);
+displayDataType(rawExpectedDiv, desiredResult);
 
 //===================================
 // We are done!
