@@ -563,7 +563,12 @@ titleDiv.appendChild(div);
 // Display calculated data in HTML
 const calculatedDiv = document.getElementById("calculated");
 div = document.createElement(`div`);
-div.innerHTML = `Assignments due: ${getListOfAssignmentsDue(AssignmentGroup, true)}\n`;
+div.className = 'object-value';
+div.innerHTML = `Assignments due: ${getListOfAssignmentsDue(AssignmentGroup, true)}`;
+calculatedDiv.appendChild(div);
+
+div = document.createElement(`div`);
+div.className = 'object-value';
 div.innerHTML += `Learners: ${getListOfLearners(LearnerSubmissions, true)}`;
 calculatedDiv.appendChild(div);
 
