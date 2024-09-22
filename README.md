@@ -7,7 +7,7 @@ Runtime address: https://timotholt.github.io/sba-308/
 
 ==============================================================================
 
-THE INDEX.HTML web page is actually usefull and produces useful results!!
+THE INDEX.HTML web page is actually useful and produces useful results!!
 
 In the assignment notes, the assignment requirements is to log the data to the
 console. I overrode the console.log() function so that all console.log()
