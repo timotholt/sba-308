@@ -582,26 +582,24 @@ function createChildDivFromString(divID, s, optionalChildClass)
 // I wrote this one myself =)
 //============================================================================
 
-// Write (s) as a single div
-function outputSingleDiv(outputDiv, s, trailingComma) {
-
-  const div = document.createElement('div');
-  div.className = 'object-value';
-
-  // Set the inner html with key and value
-  div.innerHTML = s + trailingComma;
-
-  // Append the div to the output div
-  outputDiv.appendChild(div);
-}
-
 function displayDataType(outputDiv, item, keyName = null, indentString = ``, trailingComma = ``) {
-
-  debugger;
 
   // Helper functions
   const isArray = (value) => Array.isArray(value);
   const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
+  
+  // Write (s) as a single div
+  function outputSingleDiv(outputDiv, s, trailingComma) {
+
+    const div = document.createElement('div');
+    div.className = 'object-value';
+
+    // Set the inner html with key and value
+    div.innerHTML = s + trailingComma;
+
+    // Append the div to the output div
+    outputDiv.appendChild(div);
+  }
 
   // We don't know what kind of object we are passed, so let's see if it's an array
   if (isArray(item)) {
