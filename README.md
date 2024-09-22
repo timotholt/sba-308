@@ -9,10 +9,10 @@ Runtime address: https://timotholt.github.io/sba-308/
 
 This SBA project actually has a real user interface in index.html
 
-The app dynamically parses the structures CourseInfo, AssignmentGroup,
-and SubmissionData and present it in the html page. The console.log is
-also fed into the html page so provide a single user experience for
-the whole app.
+The app recursively and intelligently parses the structures
+CourseInfo, AssignmentGroup, and SubmissionData and presents it in
+the html page. The console.log is also fed into the html page so
+provide a single user experience for the whole app.
 
 Notes:
 
