@@ -456,17 +456,14 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 // You can verify that the helper functions work by uncommenting this below.
 // verifyHelperFunctions();
 
-//==========================================================================
-// Below is the Javascript result 
-//==========================================================================
-
-
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
-//===================================
-// We are done!
-//===================================
+//==========================================================================
+// NOTE that we update the HTML page dynamically in displayhtml.js, so it's
+// expected that displayhtml.js is included AFTER scripts.js in index.html
+//==========================================================================
 
+// We are done!
 console.log(`\nApplication complete.`);
