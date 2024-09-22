@@ -249,47 +249,49 @@ function displayLearnerData(obj, outputDiv) {
   
 // Write the learner data to the HTML and to the console
 {
-    // DIV IDs to write the actual and expected results to
-    const actualDiv = document.getElementById("actualResult");
-    const expectDiv = document.getElementById("expectedResult");  
-  
-    // Output the actual learner results
-    console.log(`getLearnerData() produced ${actualResult.length} objects:`);
-    console.log(`[`);
-    for (let i = 0; i < actualResult.length; i++) {
-      console.log(`&nbsp;&nbsp;{`);
-      displayLearnerData(actualResult[i], actualDiv);
-      consoleLogLearnerData(actualResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
-  
-      if (i < actualResult.length - 1)
-        console.log(`&nbsp;&nbsp;},`);
-      else
-        console.log(`&nbsp;&nbsp;}`);
-    }
-    console.log(`]`);  
-  
-    // Output the desired learner results
-    console.log(`\n And the desired result of the appliation is ${actualResult.length} objects:`);
-    console.log(`[`);  
-    for (let i = 0; i < desiredResult.length; i++) {
-      console.log(`&nbsp;&nbsp;{`);
-      displayLearnerData(desiredResult[i], expectDiv);
-      consoleLogLearnerData(desiredResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
-  
-      if (i < desiredResult.length - 1)
-        console.log(`&nbsp;&nbsp;},`);
-      else
-        console.log(`&nbsp;&nbsp;}`);
-  
-    }
-    console.log(`]`);  
+  // DIV IDs to write the actual and expected results to
+  const actualDiv = document.getElementById("actualResult");
+  const expectDiv = document.getElementById("expectedResult");  
+
+  // Output the actual learner results
+  console.log(`getLearnerData() produced ${actualResult.length} objects:`);
+  console.log(`[`);
+  for (let i = 0; i < actualResult.length; i++) {
+    console.log(`&nbsp;&nbsp;{`);
+    displayLearnerData(actualResult[i], actualDiv);
+    consoleLogLearnerData(actualResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+
+    if (i < actualResult.length - 1)
+      console.log(`&nbsp;&nbsp;},`);
+    else
+      console.log(`&nbsp;&nbsp;}`);
   }
+  console.log(`]`);  
+
+  // Output the desired learner results
+  console.log(`\n And the desired result of the appliation is ${actualResult.length} objects:`);
+  console.log(`[`);  
+  for (let i = 0; i < desiredResult.length; i++) {
+    console.log(`&nbsp;&nbsp;{`);
+    displayLearnerData(desiredResult[i], expectDiv);
+    consoleLogLearnerData(desiredResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+
+    if (i < desiredResult.length - 1)
+      console.log(`&nbsp;&nbsp;},`);
+    else
+      console.log(`&nbsp;&nbsp;}`);
+
+  }
+  console.log(`]`);  
+}
   
-  // Display raw actual data
-  const rawActualDiv = document.getElementById("rawActual");
-  displayDataType(rawActualDiv, actualResult);
+// Display raw actual data
+const rawActualDiv = document.getElementById("rawActual");
+displayDataType(rawActualDiv, actualResult);
+
+// Display raw expected data
+const rawExpectedDiv = document.getElementById("rawExpected");
+displayDataType(rawExpectedDiv, desiredResult);
   
-  // Display raw expected data
-  const rawExpectedDiv = document.getElementById("rawExpected");
-  displayDataType(rawExpectedDiv, desiredResult);
-  
+  // We are done!
+console.log(`\nEverything below this line isn't from this app (gibhub/web browser/debugger/etc).`);
