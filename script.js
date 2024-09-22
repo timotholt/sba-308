@@ -2,6 +2,51 @@
 // SBA-308
 //============================================================================
 
+//============================================================================
+// Hook the console log function so we can show results on the HTML page
+//
+// This allows us to write the console out to the HTML!
+//============================================================================
+
+console.stdlog = console.log.bind(console);
+console.logs = [];
+let entireConsoleLog = '';
+
+const consoleDiv = document.getElementById("console");
+const consoleSubDiv = document.createElement('pre');
+
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while(end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
+console.log = function() {
+    console.logs.push(Array.from(arguments));
+    console.stdlog.apply(console, arguments);
+
+    let s = '';
+
+    // Grab all the arguments and build one string with it
+    for (i = 0; i < arguments.length; i++) {
+      s += String(arguments[i]);
+    }
+
+    entireConsoleLog += s;
+    entireConsoleLog += `\n`;
+
+    consoleSubDiv.innerHTML = entireConsoleLog;
+    consoleDiv.appendChild(consoleSubDiv);
+    // wait(200);
+
+    // // in plain js
+    // document.getElementById('consoleContainer').style.display = 'none';
+    // document.getElementById('consoleContainer').style.display = 'block';
+}
+
+// Write the first message to the console
 console.log(`Hello from script.js`);
 
 //============================================================================
@@ -477,7 +522,8 @@ function displayLearnerData(obj, outputDiv) {
       const displayValue = Array.isArray(value) ? value.join(`, `) : value;
 
       // Set the inner html with key and value
-      div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+      // div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+      div.innerHTML = `${key}:&nbsp;${displayValue}`;
 
       // Append the div to the output div
       outputDiv.appendChild(div);
@@ -510,7 +556,8 @@ function displayObject(obj, outputDiv) {
       const displayValue = Array.isArray(value) ? value.join(`, `) : value;
 
       // Set the inner html with key and value
-      div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+      // div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
+      div.innerHTML = `${key}:&nbsp${displayValue}`;
 
       // Append the div to the output div
       outputDiv.appendChild(div);
@@ -541,11 +588,14 @@ displayObject(LearnerSubmissions[0], lessonDiv);
   const actualDiv = document.getElementById("actualResult");
   const expectDiv = document.getElementById("expectedResult");  
 
-  for (i = 0; i < actualResult.length; i++)
+  for (i = 0; i < actualResult.length; i++) {
     displayLearnerData(actualResult[i], actualDiv);
+  }
   
-  for (i = 0; i < desiredResult.length; i++)
+  for (i = 0; i < desiredResult.length; i++) {
     displayLearnerData(desiredResult[i], expectDiv);
+
+  }
 }
 
 //===================================
