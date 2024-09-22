@@ -3,7 +3,7 @@
 //============================================================================
 
 // Write the first message to the console
-console.log(`Hello from script.js`);
+//console.log(`Hello from script.js`);
 
 //============================================================================
 // The following objects are from the assignment and must not be changed.
@@ -124,8 +124,8 @@ function getDesiredLearnerData(course, ag, submissions) {
 const applicationStartTimestamp = Date.now();                             // Unix time
 const applicationStartDatestamp = new Date(applicationStartTimestamp);    // ASCII string
 
-console.log(`Application started at ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time)`);
-console.log(`This time is used to determine if an assignment is due.`);
+console.log(`Application started at ${applicationStartDatestamp} (${applicationStartTimestamp} Unix time).`);
+console.log(`This time is used to determine if an assignment is due.\n`);
 
 //============================================================================
 // Application specific helper functions
@@ -265,7 +265,7 @@ function getListOfLearners(LearnerSubmissions) {
     // List can't be empty.  We don't use throw/catch here cause it's messy looking
   console.log(listOfLearners.length === 0 ?
     `No learners found in learner submissionslist!` :
-    `List of learners (${listOfLearners.length}) by ID = ${listOfLearners}`);
+    `${listOfLearners.length} learners submitted assignments. Their IDs are ${listOfLearners}\n`);
 
   // Return list
   return (listOfLearners);
@@ -310,10 +310,11 @@ function getListOfAssignmentsDue(ag) {
   // Sort the list
   listOfAssignmentsDue.sort((a, b) => a - b);
 
-    // List can't be empty.  We don't use throw/catch here cause it's messy looking
+  // List can't be empty.  We don't use throw/catch here cause it's messy looking
+  console.log(``);
   console.log(listOfAssignmentsDue.length === 0 ?
     `No assignments found in assignment group!` :
-    `ID's of assignments that are currently due on ${applicationStartDatestamp} = ${listOfAssignmentsDue}`);
+    `Based upon the application start time, the following assigments are currently due on\n${applicationStartDatestamp} = ${listOfAssignmentsDue}\n`);
 
   // Return list
   return (listOfAssignmentsDue);
@@ -558,4 +559,4 @@ displayObject(LearnerSubmissions[0], lessonDiv);
 // We are done!
 //===================================
 
-console.log(`Goodbye from script.js`);
+// console.log(`Goodbye from script.js`);

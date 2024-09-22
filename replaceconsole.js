@@ -2,47 +2,47 @@
 // Hook the console log function so we can show results on the HTML page
 //
 // This allows us to write the console out to the HTML!
+//
+// This code was modified from a semi-useless version found on stackexchange.
+//
+// -- Tim Otholt
 //============================================================================
 
+// Grab the original console.log function and save it.  Note that
+// console.stdlog exists as part of JS  
 console.stdlog = console.log.bind(console);
-console.logs = [];
+
+// part of the useless code from stackexchange
+// console.logs = [];
+
+// (Tim) - This is where we store the entire history of the console
 let entireConsoleLog = '';
 
+// (Tim) - This is the DIV we write to
 const consoleDiv = document.getElementById("console");
 const consoleSubDiv = document.createElement('pre');
-
-function wait(ms) {
-  var start = new Date().getTime();
-  var end = start;
-  while(end < start + ms) {
-    end = new Date().getTime();
-  }
-}
 
 // Override the console.log() funcction
 console.log = function() {
 
-  // Included but not used
-  console.logs.push(Array.from(arguments));
+  // Part of the useless code from stackexchange
+  // console.logs.push(Array.from(arguments));
+
+  // This is the code that calls the original console.log()
   console.stdlog.apply(console, arguments);
 
-  // Grab all the arguments and convert it to one long string
+  // (Tim) - Grab all the arguments and convert it to one long string
   let s = '';
   for (i = 0; i < arguments.length; i++) {
     s += String(arguments[i]);
   }
 
-  // Add it to the "fake" console
+  // (Tim) Add it to the "fake" console
   entireConsoleLog += s;
   entireConsoleLog += `\n`;
 
-  // And output the "fake" console
+  // (Tim) And output the "fake" console
   consoleSubDiv.innerHTML = entireConsoleLog;
   consoleDiv.appendChild(consoleSubDiv);
-  // wait(200);
-
-  // // in plain js
-  // document.getElementById('consoleContainer').style.display = 'none';
-  // document.getElementById('consoleContainer').style.display = 'block';
 }
 

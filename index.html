@@ -88,13 +88,22 @@
             width: auto;
             margin-top: 0.5em;
             background-color: #600060;
+            background-color: black;
             font-weight: normal;
             border-top-left-radius: 0em;
             border-top-right-radius: 0em;
             text-align: left;
+            line-height: 1.4;
 
+            /* Make the console scroll, and style the scrollbar */
             overflow-y: auto;
             max-height: 20em;
+            /* scrollbar-color: #400040 #602060; */
+            scrollbar-color: #A0A0A0 #600060;
+        }
+
+        #console pre {
+            font-size: 1.3em;
         }
 
         #lessons {
@@ -121,7 +130,6 @@
             padding-top: 2px;
             padding-bottom: 2px;
         }
-
     </style>
 </head>
 <body>
