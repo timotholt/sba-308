@@ -550,6 +550,113 @@ function displayObject(obj, outputDiv) {
   }
 }
 
+
+//==============
+// V2
+//==============
+
+// Helper functions
+const isArray = (value) => {
+  return Array.isArray(value);
+};
+
+const isObject = (value) => {
+  return !!(value && typeof value === "object" && !Array.isArray(value));
+};
+
+// Write (s) as a single div
+function outputSingleDiv(s, trailingComma, outputDiv) {
+
+  const div = document.createElement('div');
+  div.className = 'object-value';
+
+  // Set the inner html with key and value
+  div.innerHTML = s + trailingComma;
+
+  // Append the div to the output div
+  outputDiv.appendChild(div);
+}
+
+function displayDataType(item, keyName, indentString, trailingComma, outputDiv) {
+
+  debugger;
+
+  // Handle arrays
+  if (isArray(item)) {
+
+    // Get array name
+    let name = item.constructor.name;
+    if (name)
+      name += ` `;
+
+    // Write out a [
+    outputSingleDiv(`${indentString}${name}[`, ``, outputDiv);
+
+    // Traverse every item in the array
+    for (let i = 0; i < item.length; i++) {
+      let trailingComma = (i < item.length - 1) ? `, ` : ``;
+      displayDataType(item[i], i.toString, indentString + `&nbsp;&nbsp;`, trailingComma, outputDiv);
+    }
+
+    // Write out a ]
+    outputSingleDiv(`${indentString}]`, trailingComma, outputDiv);
+  }
+
+  // Handle objects
+  else if (isObject(item)) {
+
+    // Get object name
+    let name = item.constructor.name;
+    if (name)
+      name += ` `;
+
+    // Write out a {
+    outputSingleDiv(`${indentString}${name}{`, ``, outputDiv);
+
+    // Get all keys of this object
+    let keys = Object.keys(item);
+
+    // Walk all keys
+    for (let i = 0; i < keys.length; i++) {
+
+      // Do explicit properties (not any inherited ones)
+      if (item.hasOwnProperty(keys[i])) {
+        const value = item[keys[i]];
+
+        let trailingComma = (i < keys.length - 1) ? `, ` : ``;
+        displayDataType(item[keys[i]], keys[i], indentString + `&nbsp;&nbsp;`, trailingComma, outputDiv);
+      }
+    }
+    
+    // Write out a }
+    outputSingleDiv(`${indentString}}`, trailingComma, outputDiv);
+  }
+
+  // Handle primative data types
+  else {
+
+    // Identify what type of datatype is passed
+    switch (typeof item) {
+
+      // We can't process undefined data
+      case "undefined": return;
+
+      // Basic types are easy to handle
+      case "string": 
+      case "number":
+      case "bigint":
+      case "boolean":
+      case "symbol":
+      case "function":
+        if (keyName)
+          outputSingleDiv(`${indentString}${keyName} : ${item}`, trailingComma, outputDiv);
+        else
+          outputSingleDiv(`${indentString}${item}`, trailingComma, outputDiv);
+        break;
+      }
+  }
+}
+
 //==========================================================================
 // Draw Screen
 //==========================================================================
@@ -572,6 +679,10 @@ div.className = 'object-value';
 div.innerHTML += `Learners: ${getListOfLearners(LearnerSubmissions, true)}`;
 calculatedDiv.appendChild(div);
 
+// Display submissions
+const submissionDiv = document.getElementById("submissions");
+displayDataType(LearnerSubmissions, null, ``, ``, submissionDiv);
+
 // Run the app!
 const actualResult = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
@@ -581,6 +692,8 @@ const desiredResult = getDesiredLearnerData(CourseInfo, AssignmentGroup, Learner
   // DIV IDs to write the actual and expected results to
   const actualDiv = document.getElementById("actualResult");
   const expectDiv = document.getElementById("expectedResult");  
+
+  debugger;
 
   // Output the actual learner results
   console.log(`getLearnerData() produced ${actualResult.length} objects:`);
