@@ -316,7 +316,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
             // Write it to the console
             console.log(`\xa0\xa0Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
-            console.log(`\xa0\xa0;Learner ${l}'s average for assignment ${d} is ${submissionAve} (${netAssignmentScore} / ${a.points_possible} = ${submissionAve})`);
+            console.log(`\xa0\xa0Learner ${l}'s average for assignment ${d} is ${submissionAve} (${netAssignmentScore} / ${a.points_possible} = ${submissionAve})`);
           }
           else
             console.log(`Points possible on an assignment must be > 0`);
