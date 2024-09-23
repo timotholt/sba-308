@@ -119,8 +119,10 @@ function displayLearnerData(obj, outputDiv) {
   // I wrote this one myself =)
   //============================================================================
   
-  function displayDataType(outputDiv, item, keyName = null, indentString = ``, trailingComma = ``) {
+  function displayDataType(outputDiv, item, keyName = '', indentString = ``, trailingComma = ``) {
   
+debugger;
+
     // Helper functions
     const isArray = (value) => Array.isArray(value);
     const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
@@ -146,7 +148,8 @@ function displayLearnerData(obj, outputDiv) {
     if (isArray(item)) {
   
       // Get array name
-      let name = item.constructor.name;
+      // let name = item.constructor.name;
+      let name = keyName;
       if (name)
         name += ` `;
   
@@ -156,7 +159,7 @@ function displayLearnerData(obj, outputDiv) {
       // Traverse every item in the array
       for (let i = 0; i < item.length; i++) {
         let trailingComma = (i < item.length - 1) ? `, ` : ``;
-        displayDataType(outputDiv, item[i], i.toString, indentString + `&nbsp;&nbsp;`, trailingComma);
+        displayDataType(outputDiv, item[i], i.toString() + `:`, indentString + `&nbsp;&nbsp;`, trailingComma);
       }
   
       // Write out a ]
@@ -167,7 +170,8 @@ function displayLearnerData(obj, outputDiv) {
     else if (isObject(item)) {
   
       // Get object name
-      let name = item.constructor.name;
+      // let name = item.constructor.name;
+      let name = keyName;
       if (name)
         name += ` `;
   
@@ -237,15 +241,15 @@ function displayLearnerData(obj, outputDiv) {
   
   // Display course group
   const courseDiv = document.getElementById("course");
-  displayDataType(courseDiv, CourseInfo);
+  displayDataType(courseDiv, CourseInfo, `CourseInfo`);
   
   // Display assignment group
   const assignmentsDiv = document.getElementById("assignments");
-  displayDataType(assignmentsDiv, AssignmentGroup);
+  displayDataType(assignmentsDiv, AssignmentGroup, `AssignmentGroup`);
   
   // Display submissions
   const submissionsDiv = document.getElementById("submissions");
-  displayDataType(submissionsDiv, LearnerSubmissions);
+  displayDataType(submissionsDiv, LearnerSubmissions, `LearnerSubmissions`);
   
 // Write the learner data to the HTML and to the console
 {
