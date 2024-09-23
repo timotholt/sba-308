@@ -121,9 +121,6 @@ function displayLearnerData(obj, outputDiv) {
   
   function displayDataType(outputDiv, item, keyName = '', indentString = ``, trailingComma = ``) {
   
-debugger;
-
-    // Helper functions
     const isArray = (value) => Array.isArray(value);
     const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
     
