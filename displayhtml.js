@@ -20,7 +20,7 @@ function displayLearnerData(obj, outputDiv) {
   
         // Set the inner html with key and value
         // div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
-        div.innerHTML = `${key}:&nbsp;${displayValue}`;
+        div.innerHTML = `${key}:\xa0${displayValue}`;
   
         // Append the div to the output div
         outputDiv.appendChild(div);
@@ -75,7 +75,7 @@ function displayLearnerData(obj, outputDiv) {
   
         // Set the inner html with key and value
         // div.innerHTML = `<strong>${key}:</strong> ${displayValue}`;
-        div.innerHTML = `${key}:&nbsp${displayValue}`;
+        div.innerHTML = `${key}:\xa0${displayValue}`;
   
         // Append the div to the output div
         outputDiv.appendChild(div);
@@ -121,6 +121,9 @@ function displayLearnerData(obj, outputDiv) {
   
   function displayDataType(outputDiv, item, keyName = '', indentString = ``, trailingComma = ``) {
   
+
+    debugger;
+
     const isArray = (value) => Array.isArray(value);
     const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
     
@@ -156,7 +159,7 @@ function displayLearnerData(obj, outputDiv) {
       // Traverse every item in the array
       for (let i = 0; i < item.length; i++) {
         let trailingComma = (i < item.length - 1) ? `, ` : ``;
-        displayDataType(outputDiv, item[i], i.toString() + `:`, indentString + `&nbsp;&nbsp;`, trailingComma);
+        displayDataType(outputDiv, item[i], i.toString() + `:`, indentString + `\xa0\xa0`, trailingComma);
       }
   
       // Write out a ]
@@ -186,7 +189,7 @@ function displayLearnerData(obj, outputDiv) {
           const value = item[keys[i]];
   
           let trailingComma = (i < keys.length - 1) ? `, ` : ``;
-          displayDataType(outputDiv, item[keys[i]], keys[i], indentString + `&nbsp;&nbsp;`, trailingComma);
+          displayDataType(outputDiv, item[keys[i]], keys[i], indentString + `\xa0\xa0`, trailingComma);
         }
       }
       
@@ -258,14 +261,14 @@ function displayLearnerData(obj, outputDiv) {
   console.log(`getLearnerData() produced ${actualResult.length} objects:`);
   console.log(`[`);
   for (let i = 0; i < actualResult.length; i++) {
-    console.log(`&nbsp;&nbsp;{`);
+    console.log(`'\xa0''\xa0'{`);
     displayLearnerData(actualResult[i], actualDiv);
-    consoleLogLearnerData(actualResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+    consoleLogLearnerData(actualResult[i], `\xa0\xa0\xa0\xa0`);
 
     if (i < actualResult.length - 1)
-      console.log(`&nbsp;&nbsp;},`);
+      console.log(`\xa0\xa0},`);
     else
-      console.log(`&nbsp;&nbsp;}`);
+      console.log(`\xa0\xa0}`);
   }
   console.log(`]`);  
 
@@ -273,14 +276,14 @@ function displayLearnerData(obj, outputDiv) {
   console.log(`\n And the desired result of the appliation is ${actualResult.length} objects:`);
   console.log(`[`);  
   for (let i = 0; i < desiredResult.length; i++) {
-    console.log(`&nbsp;&nbsp;{`);
+    console.log(`\xa0\xa0{`);
     displayLearnerData(desiredResult[i], expectDiv);
-    consoleLogLearnerData(desiredResult[i], `&nbsp;&nbsp;&nbsp;&nbsp;`);
+    consoleLogLearnerData(desiredResult[i], `\xa0\xa0\xa0\xa0`);
 
     if (i < desiredResult.length - 1)
-      console.log(`&nbsp;&nbsp;},`);
+      console.log(`\xa0\xa0},`);
     else
-      console.log(`&nbsp;&nbsp;}`);
+      console.log(`\xa0\xa0}`);
 
   }
   console.log(`]`);  
