@@ -23,6 +23,8 @@ AND written to the console window in index.html.
 
 ![Alt text](https://github.com/timotholt/sba-308/blob/main/Screenshot.png)
 
+---
+
 Requirements Tracking
 
 | Requirement | Weight | Completed |
@@ -42,6 +44,8 @@ Requirements Tracking
 | Commit frequently to the git repository. | 5% | ✅ |
 | Include a README file that contains a description of your application. | 2% | ✅ |
 | Total | 100% | |
+
+---
 
 This project includes a bunch of files:
 
