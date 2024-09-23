@@ -21,7 +21,7 @@ to the console. I overrode the console.log() function so that all
 console.log() ouputs get sent to BOTH the standard console.log() function
 AND written to the console window in index.html.
 
-![Alt text](https://github.com/timotholt/sba-308/blob/main/Screenshot%202024-09-22%20113037.png)
+![Alt text](https://github.com/timotholt/sba-308/blob/main/Screenshot.png)
 
 Requirements Tracking
 
