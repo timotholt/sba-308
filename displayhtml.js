@@ -121,9 +121,6 @@ function displayLearnerData(obj, outputDiv) {
   
   function displayDataType(outputDiv, item, keyName = '', indentString = ``, trailingComma = ``) {
   
-
-    debugger;
-
     const isArray = (value) => Array.isArray(value);
     const isObject = (value) => !!(value && typeof value === "object" && !Array.isArray(value));  
     
@@ -261,7 +258,7 @@ function displayLearnerData(obj, outputDiv) {
   console.log(`getLearnerData() produced ${actualResult.length} objects:`);
   console.log(`[`);
   for (let i = 0; i < actualResult.length; i++) {
-    console.log(`'\xa0''\xa0'{`);
+    console.log(`\xa0\xa0{`);
     displayLearnerData(actualResult[i], actualDiv);
     consoleLogLearnerData(actualResult[i], `\xa0\xa0\xa0\xa0`);
 
@@ -288,7 +285,9 @@ function displayLearnerData(obj, outputDiv) {
   }
   console.log(`]`);  
 }
-  
+
+debugger;
+
 // Display raw actual data
 const rawActualDiv = document.getElementById("rawActual");
 displayDataType(rawActualDiv, actualResult);

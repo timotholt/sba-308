@@ -295,7 +295,7 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
 
           // If the assignment is late, assign a penalty . . .
           if (getTimestamp(s.submission.submitted_at) > getTimestamp(a.due_at)) {
-            console.log(`&nbsp;&nbsp;Learner ${l}'s assignment ${d} is late!`);
+            console.log(`\xa0\xa0Learner ${l}'s assignment ${d} is late!`);
 
             // Penalty = 10% of maximum points
             assignmentPenalty = a.points_possible * 0.10;
@@ -315,8 +315,8 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
             learnerData[d] = submissionAve;
 
             // Write it to the console
-            console.log(`&nbsp;&nbsp;Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
-            console.log(`&nbsp;&nbsp;Learner ${l}'s average for assignment ${d} is ${submissionAve} (${netAssignmentScore} / ${a.points_possible} = ${submissionAve})`);
+            console.log(`\xa0\xa0Learner ${l} earned ${netAssignmentScore} points out of a maximum of ${a.points_possible} on assignment ${d}`);
+            console.log(`\xa0\xa0;Learner ${l}'s average for assignment ${d} is ${submissionAve} (${netAssignmentScore} / ${a.points_possible} = ${submissionAve})`);
           }
           else
             console.log(`Points possible on an assignment must be > 0`);
@@ -325,12 +325,12 @@ function getLearnerData(CourseInfo, assignmentGroup, learnerSubmissions)
     }
 
     // Output summary for this learner
-    console.log(`&nbsp;&nbsp;Learner ${l} earned a total of ${totalEarnedPoints} points out of a maximum of ${totalPossiblePoints} for assignenments ${dueAssignments}`);
+    console.log(`\xa0\xa0Learner ${l} earned a total of ${totalEarnedPoints} points out of a maximum of ${totalPossiblePoints} for assignenments ${dueAssignments}`);
 
     // Calculate average and save it
     let average = Number((totalEarnedPoints / totalPossiblePoints).toFixed(3));
     learnerData['avg'] = average;
-    console.log(`&nbsp;&nbsp;Learner ${l} average is ${average} (${totalEarnedPoints} / ${totalPossiblePoints} = ${average})\n`);
+    console.log(`\xa0\xa0Learner ${l} average is ${average} (${totalEarnedPoints} / ${totalPossiblePoints} = ${average})\n`);
 
     // Display data
     // console.log(`--Learner ${l}'s data:`);
