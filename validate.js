@@ -158,7 +158,7 @@ function validateAssignmentGroup(courseInfo, assignmentGroup)
       throw `AssignmentGroup.group_weight is a number <= 0`;
     else if (!Array.isArray(assignmentGroup.assignments))
       throw `AssignmentGroup.assignments is not an array`;
-    else if (Object.keys(AssignmentGroup).length != 5)
+    else if (Object.keys(assignmentGroup).length != 5)
       throw `AssignmentGroup must have exactly 5 keys (entries)`;
 
     // Validate individual assignment entries
@@ -172,13 +172,13 @@ function validateAssignmentGroup(courseInfo, assignmentGroup)
         throw `AssignmentGroup.assignment[#${i}.name] isn't a string`;
       else if (typeof assignmentGroup.assignments[i].due_at !== `string`)
         throw `AssignmentGroup.assignment[#${i}.due_at] isn't a string`;
-      else if (!validDate(AssignmentGroup.assignments[i].due_at))
+      else if (!validDate(assignmentGroup.assignments[i].due_at))
         throw `AssignmentGroup.assignment[#${i}.due_at] isn't a valid date`;
       else if (typeof assignmentGroup.assignments[i].points_possible !== `number`)
         throw `AssignmentGroup.assignment[#${i}.points_possible] isn't a number`;
       else if (assignmentGroup.assignments[i].points_possible <= 0)
         throw `AssignmentGroup.assignment[#${i}.points_possible] <= 0`;
-      else if (Object.keys(AssignmentGroup.assignments[i]).length != 4)
+      else if (Object.keys(assignmentGroup.assignments[i]).length != 4)
         throw `AssignmentGroup.assignment[#${i}] must have exactly 4 keys (entries)`;
     }
   }
